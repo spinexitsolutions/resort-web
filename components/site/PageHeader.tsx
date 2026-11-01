@@ -13,10 +13,11 @@ export default function PageHeader({ eyebrow, title, intro, image, accent = [] }
   return (
     <header ref={ref} className="relative bg-paper pt-24 md:pt-36">
       <div className="container-x">
-        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EXPO, delay: 0.3 }} className="eyebrow text-muted">
+        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EXPO, delay: 0.3 }} className="inline-flex items-center gap-2 rounded-full bg-white/60 py-1 pl-1 pr-3.5 text-[0.8rem] font-medium ring-1 ring-line">
+          <span className="h-6 w-6 rounded-full bg-accent" />
           {eyebrow}
         </motion.p>
-        <SplitReveal as="h1" text={title} delay={0.35} italicWords={accent} className="mt-5 max-w-[18ch] font-display text-[clamp(3rem,9vw,8.5rem)] leading-[0.9] tracking-[-0.03em]" />
+        <SplitReveal as="h1" text={title} delay={0.35} italicWords={accent} className="mt-6 max-w-[14ch] font-display text-[clamp(3.4rem,10.5vw,10rem)] leading-[0.84] tracking-[-0.05em]" />
         {intro && (
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: EXPO, delay: 0.7 }} className="mt-8 max-w-xl text-[1.0625rem] leading-relaxed text-muted text-pretty">
             {intro}

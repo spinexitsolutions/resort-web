@@ -12,10 +12,10 @@ export default async function Page() {
   return (
     <>
       <PageHeader eyebrow="Offers · Book direct" title="Little reasons to say yes." accent={["yes."]} intro="Exclusive to our website — apply the code at checkout, or we'll apply it for you." />
-      <div className="container-x grid gap-6 py-16 sm:grid-cols-2 md:py-24 lg:grid-cols-3">
+      <div style={{ ["--notch" as string]: "var(--paper)" }} className="container-x grid gap-6 py-16 sm:grid-cols-2 md:py-24 lg:grid-cols-3">
         {items.map((o, i) => (
           <Reveal key={o.id} delay={i * 0.08}>
-            <OfferCard o={o} />
+            <OfferCard o={o} tone={i} />
           </Reveal>
         ))}
       </div>

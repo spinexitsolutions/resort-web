@@ -1,10 +1,19 @@
 "use client";
 
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 import type { Experience } from "@/lib/types";
-import { formatMoney } from "@/lib/utils";
-import { Img, PillButton, SectionLabel, SplitReveal } from "../motion";
+import { cn, formatMoney } from "@/lib/utils";
+import { H2, Img, PillButton, SectionLabel, SplitReveal } from "../motion";
+
+const PANELS = [
+  "bg-accent text-white",
+  "bg-paper text-ink",
+  "bg-lagoon text-white",
+  "bg-[#E9E1D3] text-ink",
+  "bg-white text-ink",
+];
 
 export default function Experiences({ items }: { items: Experience[] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -15,7 +24,7 @@ export default function Experiences({ items }: { items: Experience[] }) {
       <div className="container-x flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <SectionLabel index="03" light>Experiences</SectionLabel>
-          <SplitReveal text="Days you'll still be telling stories about." className="mt-5 max-w-[15ch] font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["stories"]} inlineImage={{ after: 1, src: items[1]?.image ?? items[0]?.image ?? "" }} />
+          <SplitReveal text="Days you'll still be telling stories about." className={`mt-6 max-w-[14ch] ${H2}`} italicWords={["stories"]} inlineImage={{ after: 1, src: items[1]?.image ?? items[0]?.image ?? "" }} />
         </div>
         <PillButton href="/experiences" variant="ghost-light" className="self-start md:self-auto">All experiences</PillButton>
       </div>
@@ -31,28 +40,40 @@ export default function Experiences({ items }: { items: Experience[] }) {
 
 function StackCard({ item, i, total, progress }: { item: Experience; i: number; total: number; progress: MotionValue<number> }) {
   const start = i / total;
-  const scale = useTransform(progress, [start, 1], [1, 1 - (total - i) * 0.04]);
-  const dim = useTransform(progress, [start, Math.min(1, start + 1 / total)], [0, i === total - 1 ? 0 : 0.5]);
+  const scale = useTransform(progress, [start, 1], [1, 1 - (total - i) * 0.035]);
+  const imgScale = useTransform(progress, [start, Math.min(1, start + 1 / total)], [1.15, 1]);
+  const panel = PANELS[i % PANELS.length];
+  const light = panel.includes("text-white");
   return (
-    <div className="sticky h-[78svh] md:h-[80vh]" style={{ top: `calc(5rem + ${i * 18}px)` }}>
-      <motion.article style={{ scale }} className="relative h-[72svh] origin-top overflow-hidden rounded-[28px] md:h-[74vh]">
-        <Img src={item.image} alt={item.title} fill sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-        <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-black" />
-        <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-12">
-          <div className="flex items-center justify-between">
-            <span className="glass-dark rounded-full px-3.5 py-1.5 text-xs">{item.category}</span>
-            <span className="font-mono text-xs text-white/70">
-              {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+    <div className="sticky h-[80svh] md:h-[78vh]" style={{ top: `calc(4.5rem + ${i * 16}px)` }}>
+      <motion.article
+        style={{ scale }}
+        className="relative grid h-[74svh] origin-top grid-rows-[1.15fr_1fr] overflow-hidden rounded-[32px] md:h-[72vh] md:grid-cols-[1.35fr_1fr] md:grid-rows-1"
+      >
+        <div className="relative overflow-hidden">
+          <motion.div style={{ scale: imgScale }} className="absolute inset-0">
+            <Img src={item.image} alt={item.title} fill sizes="(min-width:768px) 60vw, 100vw" className="object-cover" />
+          </motion.div>
+          <span className="absolute left-4 top-4 rounded-full bg-black/30 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">{item.category}</span>
+        </div>
+        <div className={cn("flex flex-col justify-between p-6 md:p-10", panel)}>
+          <div className="flex items-start justify-between">
+            <span className={cn("font-display text-[clamp(3.5rem,8vw,7rem)] leading-[0.8] tracking-[-0.05em]", light ? "text-white/25" : "text-ink/15")}>
+              {String(i + 1).padStart(2, "0")}
             </span>
+            <span className={cn("rounded-full px-3 py-1.5 text-xs font-semibold", light ? "bg-white/15" : "bg-ink/5")}>{item.duration}</span>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 md:items-end">
-            <h3 className="font-display text-[clamp(2.2rem,5vw,4.5rem)] leading-[0.95] tracking-tight">{item.title}</h3>
-            <div className="md:justify-self-end md:text-right">
-              <p className="max-w-sm text-white/80 md:ml-auto">{item.description}</p>
-              <p className="mt-4 text-sm text-white/60">
-                {item.duration} · from <span className="text-white">{formatMoney(item.price)}</span>
-              </p>
+          <div>
+            <h3 className="font-display text-[clamp(2rem,3.6vw,3.4rem)] leading-[0.9] tracking-[-0.04em]">{item.title}</h3>
+            <p className={cn("mt-3 hidden max-w-sm md:block", light ? "text-white/80" : "text-ink/70")}>{item.description}</p>
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <span className="text-sm font-semibold">from {formatMoney(item.price)}</span>
+              <Link
+                href={`/contact?type=general&subject=${encodeURIComponent(item.title)}`}
+                className={cn("rounded-full px-4 py-2 text-sm font-semibold transition-transform active:scale-95", light ? "bg-white text-ink" : "bg-ink text-white")}
+              >
+                Enquire →
+              </Link>
             </div>
           </div>
         </div>

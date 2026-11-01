@@ -4,89 +4,101 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motio
 import { useState } from "react";
 import type { Dining as DiningT } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { EXPO, Img, PillButton, SectionLabel, SplitReveal } from "../motion";
+import { EXPO, H2, Img, PillButton, SectionLabel, SplitReveal } from "../motion";
 
 export default function Dining({ items }: { items: DiningT[] }) {
-  const [active, setActive] = useState<number | null>(null);
-  const [open, setOpen] = useState(0);
+  const [hover, setHover] = useState<number | null>(null);
+  const [open, setOpen] = useState<number>(-1);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const x = useSpring(mx, { stiffness: 150, damping: 20 });
-  const y = useSpring(my, { stiffness: 150, damping: 20 });
+  const x = useSpring(mx, { stiffness: 160, damping: 20 });
+  const y = useSpring(my, { stiffness: 160, damping: 20 });
 
   return (
-    <section id="dining" className="relative bg-paper py-24 md:py-40">
-      <div className="container-x grid gap-10 md:grid-cols-12">
-        <div className="md:col-span-4">
+    <section id="dining" className="relative bg-paper py-24 md:py-36">
+      <div className="container-x flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
           <SectionLabel index="04">Dining</SectionLabel>
-          <SplitReveal text="Four kitchens. One island pantry." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["island", "pantry."]} inlineImage={{ after: 1, src: items[0]?.image ?? "" }} />
-          <p className="mt-6 max-w-sm text-muted">Half of what we serve is grown, caught or foraged within a few kilometres of your table.</p>
-          <PillButton href="/dining" variant="ghost" className="mt-8">Explore dining</PillButton>
+          <SplitReveal text="Four kitchens. One island pantry." className={`mt-6 max-w-[13ch] ${H2}`} italicWords={["island", "pantry."]} inlineImage={{ after: 1, src: items[0]?.image ?? "" }} />
         </div>
+        <div className="max-w-xs">
+          <p className="text-muted">Half of what we serve is grown, caught or foraged within a few kilometres of your table.</p>
+          <PillButton href="/dining" variant="ink" className="mt-6">Explore dining</PillButton>
+        </div>
+      </div>
 
-        <div
-          className="relative md:col-span-8"
-          onPointerMove={(e) => {
-            const r = e.currentTarget.getBoundingClientRect();
-            mx.set(e.clientX - r.left);
-            my.set(e.clientY - r.top);
-          }}
-          onPointerLeave={() => setActive(null)}
-        >
-          {/* floating preview (desktop hover) */}
-          <motion.div style={{ x, y }} className="pointer-events-none absolute left-0 top-0 z-10 hidden md:block">
-            <AnimatePresence>
-              {active !== null && (
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, scale: 0.6, rotate: -6 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, ease: EXPO }}
-                  className="relative -ml-36 -mt-48 h-64 w-72 overflow-hidden rounded-2xl shadow-2xl"
-                >
-                  <Img src={items[active].image} alt={items[active].name} fill sizes="300px" className="object-cover" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+      <div
+        className="relative mt-14 md:mt-20"
+        onPointerMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          mx.set(e.clientX - r.left);
+          my.set(e.clientY - r.top);
+        }}
+        onPointerLeave={() => setHover(null)}
+      >
+        <motion.div style={{ x, y }} className="pointer-events-none absolute left-0 top-0 z-20 hidden md:block">
+          <AnimatePresence>
+            {hover !== null && open !== hover && (
+              <motion.div
+                key={hover}
+                initial={{ opacity: 0, scale: 0.5, rotate: -8 }}
+                animate={{ opacity: 1, scale: 1, rotate: 4 }}
+                exit={{ opacity: 0, scale: 0.7, rotate: 0 }}
+                transition={{ duration: 0.5, ease: EXPO }}
+                className="relative -ml-40 -mt-56 h-72 w-60 overflow-hidden rounded-[22px] shadow-2xl ring-4 ring-white"
+              >
+                <Img src={items[hover].image} alt={items[hover].name} fill sizes="260px" className="object-cover" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-          <ul className="border-t border-line">
-            {items.map((d, i) => (
-              <li key={d.id} className="border-b border-line" onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}>
-                <button onClick={() => setOpen(open === i ? -1 : i)} className="group flex w-full items-center gap-5 py-6 text-left md:py-8">
-                  <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
-                  <span className={cn("flex-1 font-display text-4xl tracking-tight transition-all duration-500 ease-expo md:text-6xl", active === i && "md:translate-x-3")}>{d.name}</span>
-                  <span className="hidden text-right text-sm text-muted sm:block">
+        <ul className="border-t border-ink/15">
+          {items.map((d, i) => {
+            const isOpen = open === i;
+            const active = hover === i || isOpen;
+            return (
+              <li key={d.id} className="relative overflow-hidden border-b border-ink/15" onPointerEnter={(e) => e.pointerType === "mouse" && setHover(i)}>
+                {/* coral sweep */}
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 origin-bottom bg-accent"
+                  initial={false}
+                  animate={{ scaleY: active ? 1 : 0 }}
+                  transition={{ duration: 0.6, ease: EXPO }}
+                />
+                <button onClick={() => setOpen(isOpen ? -1 : i)} aria-expanded={isOpen} className="container-x relative flex w-full items-center gap-4 py-5 text-left md:gap-8 md:py-6">
+                  <span className={cn("w-8 text-sm font-semibold tabular-nums transition-colors", active ? "text-white/70" : "text-muted")}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={cn("flex-1 font-display text-[clamp(2.6rem,8vw,7.5rem)] leading-[0.9] tracking-[-0.05em] transition-colors duration-500", active ? "text-white" : "text-ink")}>
+                    {d.name}
+                  </span>
+                  <span className={cn("hidden text-right text-sm transition-colors sm:block", active ? "text-white/85" : "text-muted")}>
                     {d.cuisine}
                     <br />
-                    <span className="text-xs">{d.hours}</span>
+                    {d.hours}
                   </span>
-                  <span className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-full ring-1 ring-line transition-transform duration-500 ease-expo", open === i && "rotate-45 bg-ink text-paper ring-ink")}>+</span>
+                  <span className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl transition-all duration-500 ease-expo", active ? "bg-white text-accent" : "bg-ink text-white", isOpen && "rotate-45")}>+</span>
                 </button>
                 <AnimatePresence initial={false}>
-                  {open === i && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.7, ease: EXPO }} className="overflow-hidden">
-                      <div className="grid gap-5 pb-8 sm:grid-cols-[200px_1fr] md:pl-10">
+                  {isOpen && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} transition={{ duration: 0.7, ease: EXPO }} className="relative overflow-hidden">
+                      <div className="container-x grid gap-6 pb-8 text-white sm:grid-cols-[260px_1fr] md:pl-[5.5rem]">
                         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                          <Img src={d.image} alt={d.name} fill sizes="240px" className="object-cover" />
+                          <Img src={d.image} alt={d.name} fill sizes="280px" className="object-cover" />
                         </div>
-                        <div>
-                          <p className="text-[1.0625rem] leading-relaxed">{d.description}</p>
-                          <p className="mt-4 text-sm text-muted">
-                            <span className="eyebrow mr-2 text-accent">Signature</span>
-                            {d.signature}
-                          </p>
-                          <p className="mt-2 text-sm text-muted sm:hidden">{d.cuisine} · {d.hours}</p>
+                        <div className="max-w-xl">
+                          <p className="text-lg leading-relaxed">{d.description}</p>
+                          <p className="mt-5 inline-flex rounded-full bg-white/15 px-4 py-2 text-sm">Signature · {d.signature}</p>
+                          <p className="mt-3 text-sm text-white/80 sm:hidden">{d.cuisine} · {d.hours}</p>
                         </div>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </li>
-            ))}
-          </ul>
-        </div>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

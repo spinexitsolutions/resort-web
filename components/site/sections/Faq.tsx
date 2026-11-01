@@ -4,37 +4,43 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import type { Faq as FaqT } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { EXPO, SectionLabel, SplitReveal } from "../motion";
+import { EXPO, H2, SectionLabel, SplitReveal } from "../motion";
 
 export default function Faq({ items }: { items: FaqT[] }) {
   const [open, setOpen] = useState<string | null>(items[0]?.id ?? null);
   return (
     <section id="faq" className="bg-mist py-24 md:py-36">
-      <div className="container-x grid gap-10 md:grid-cols-12">
+      <div className="container-x grid gap-12 md:grid-cols-12">
         <div className="md:col-span-4">
-          <SectionLabel index="11">FAQ</SectionLabel>
-          <SplitReveal text="Good questions." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["questions."]} />
+          <div className="md:sticky md:top-28">
+            <SectionLabel index="11">FAQ</SectionLabel>
+            <SplitReveal text="Good questions." className={`mt-6 ${H2}`} italicWords={["questions."]} />
+            <p className="mt-6 max-w-xs text-muted">Can&apos;t find yours? Our concierge replies within the hour.</p>
+          </div>
         </div>
-        <div className="md:col-span-8">
-          {items.map((f) => {
+        <div className="space-y-2 md:col-span-8">
+          {items.map((f, i) => {
             const isOpen = open === f.id;
             return (
-              <div key={f.id} className="border-b border-line">
-                <button onClick={() => setOpen(isOpen ? null : f.id)} aria-expanded={isOpen} className="flex w-full items-center justify-between gap-6 py-6 text-left">
-                  <span className="text-lg font-medium tracking-tight md:text-xl">{f.question}</span>
-                  <span className={cn("relative h-4 w-4 shrink-0 transition-transform duration-500 ease-expo", isOpen && "rotate-180")}>
-                    <span className="absolute left-0 top-1/2 h-px w-4 bg-ink" />
-                    <span className={cn("absolute left-1/2 top-0 h-4 w-px bg-ink transition-transform duration-500 ease-expo", isOpen && "scale-y-0")} />
-                  </span>
-                </button>
+              <motion.div
+                key={f.id}
+                layout
+                transition={{ layout: { duration: 0.6, ease: EXPO } }}
+                className={cn("overflow-hidden rounded-[24px] transition-colors duration-500", isOpen ? "bg-ink text-white" : "bg-white hover:bg-white/70")}
+              >
+                <motion.button layout="position" onClick={() => setOpen(isOpen ? null : f.id)} aria-expanded={isOpen} className="flex w-full items-center gap-5 p-5 text-left md:p-6">
+                  <span className={cn("text-sm font-semibold tabular-nums", isOpen ? "text-accent" : "text-muted")}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className="flex-1 font-display text-[clamp(1.35rem,2.4vw,2rem)] leading-tight tracking-[-0.03em]">{f.question}</span>
+                  <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-full text-xl transition-all duration-500 ease-expo", isOpen ? "rotate-45 bg-accent text-white" : "bg-ink/5")}>+</span>
+                </motion.button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.6, ease: EXPO }} className="overflow-hidden">
-                      <p className="max-w-2xl pb-7 leading-relaxed text-muted">{f.answer}</p>
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.6, ease: EXPO }}>
+                      <p className="max-w-2xl px-5 pb-6 leading-relaxed text-white/75 md:pl-[4.25rem] md:pr-6">{f.answer}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
         </div>

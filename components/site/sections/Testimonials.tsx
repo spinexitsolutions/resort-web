@@ -39,7 +39,7 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
         </div>
 
         <motion.div
-          className="relative mt-12 min-h-[22rem] md:mt-16 md:min-h-[24rem]"
+          className="relative mt-10 min-h-[26rem] md:mt-12 md:min-h-[30rem]"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={(_, info) => {
@@ -49,8 +49,9 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
         >
           <AnimatePresence mode="wait">
             <motion.figure key={t.id}>
-              <blockquote className="font-display text-[clamp(1.9rem,4.6vw,4.25rem)] leading-[1.08] tracking-[-0.015em]">
-                {("“" + t.quote + "”").split(" ").map((w, k) => (
+              <span aria-hidden className="block h-[0.5em] font-display text-[clamp(7rem,14vw,12rem)] leading-[0.8] text-accent">“</span>
+              <blockquote className="font-display text-[clamp(2.2rem,5.4vw,5.2rem)] leading-[0.95] tracking-[-0.04em]">
+                {t.quote.split(" ").map((w, k) => (
                   <span key={k} className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom">
                     <motion.span
                       className="inline-block"
@@ -70,7 +71,7 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
                   <span className="block font-medium">{t.name}</span>
                   <span className="text-sm text-paper/55">{t.location} · stayed in {t.stay}</span>
                 </span>
-                <span className="ml-auto hidden text-accent sm:block">{"★".repeat(t.rating)}</span>
+                <span className="ml-auto hidden rounded-full bg-accent px-3 py-1.5 text-sm font-semibold text-white sm:block">{t.rating}.0 ★</span>
               </motion.figcaption>
             </motion.figure>
           </AnimatePresence>
@@ -78,11 +79,11 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
 
         <div className="mt-10 flex gap-2">
           {items.map((x, k) => (
-            <button key={x.id} aria-label={`Show testimonial ${k + 1}`} onClick={() => setI(k)} className="relative h-1 flex-1 overflow-hidden rounded-full bg-white/15">
+            <button key={x.id} aria-label={`Show testimonial ${k + 1}`} onClick={() => setI(k)} className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/15">
               {k === i && (
                 <motion.span
                   key={`${i}-${paused}`}
-                  className="absolute inset-y-0 left-0 bg-paper"
+                  className="absolute inset-y-0 left-0 bg-accent"
                   initial={{ width: "0%" }}
                   animate={{ width: paused ? "0%" : "100%" }}
                   transition={{ duration: paused ? 0 : DURATION / 1000, ease: "linear" }}

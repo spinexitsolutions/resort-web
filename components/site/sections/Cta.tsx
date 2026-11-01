@@ -8,19 +8,23 @@ import { Img } from "../motion";
 export default function Cta({ image }: { image: string }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const x1 = useTransform(scrollYProgress, [0, 1], ["8%", "-18%"]);
+  const x2 = useTransform(scrollYProgress, [0, 1], ["-22%", "4%"]);
+  const rot = useTransform(scrollYProgress, [0, 1], [-10, 8]);
+
   return (
-    <section ref={ref} id="newsletter" className="relative overflow-hidden bg-ink py-28 text-paper md:py-44">
-      <motion.div style={{ y }} className="absolute -inset-y-[15%] inset-x-0 opacity-50">
-        <Img src={image} alt="" fill sizes="100vw" className="object-cover" />
+    <section ref={ref} id="newsletter" className="relative overflow-hidden bg-accent py-24 text-white md:py-36">
+      <div className="pointer-events-none select-none font-display leading-[0.82] tracking-[-0.06em]" aria-hidden>
+        <motion.p style={{ x: x1 }} className="whitespace-nowrap text-[clamp(5rem,17vw,16rem)]">Your villa is</motion.p>
+        <motion.p style={{ x: x2 }} className="whitespace-nowrap text-[clamp(5rem,17vw,16rem)] text-ink">waiting. waiting.</motion.p>
+      </div>
+      <motion.div style={{ rotate: rot }} className="absolute right-[6%] top-[12%] hidden h-56 w-44 overflow-hidden rounded-[28px] shadow-2xl ring-8 ring-white/20 lg:block">
+        <Img src={image} alt="" fill sizes="200px" className="object-cover" />
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/40 to-ink" />
-      <div className="container-x relative text-center">
-        <p className="eyebrow text-paper/60">Book direct · Best rate guaranteed</p>
-        <h2 className="mx-auto mt-6 max-w-[14ch] font-display text-[clamp(2.8rem,8vw,7.5rem)] leading-[0.9] tracking-[-0.03em]">
-          Your villa is <span className="text-accent">waiting.</span>
-        </h2>
-        <div className="mx-auto mt-12 max-w-3xl text-left">
+      <div className="container-x relative mt-12">
+        <h2 className="sr-only">Your villa is waiting</h2>
+        <div className="mx-auto max-w-4xl">
+          <p className="mb-4 text-center text-sm font-semibold text-white/85">Book direct · Best rate guaranteed · Free cancellation</p>
           <BookingBar />
         </div>
       </div>

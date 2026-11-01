@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 export const EXPO = [0.16, 1, 0.3, 1] as const;
 export const QUART = [0.76, 0, 0.24, 1] as const;
 
+/** Shared big section headline style. */
+export const H2 = "font-display text-[clamp(2.9rem,7.6vw,7.25rem)] leading-[0.86] tracking-[-0.045em]";
+
 /** Fade + rise when scrolled into view. */
 export function Reveal({ children, delay = 0, y = 40, className, once = true }: { children: ReactNode; delay?: number; y?: number; className?: string; once?: boolean }) {
   return (
@@ -228,6 +231,74 @@ export function Marquee({ items, className }: { items: string[]; className?: str
           </span>
         ))}
       </div>
+    </div>
+  );
+}
+
+/** Image revealed through vertical slats that slide in at different speeds as you scroll. */
+export function SlatImage({ src, alt, className, slats = 5, sizes = "100vw" }: { src: string; alt: string; className?: string; slats?: number; sizes?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
+  return (
+    <div ref={ref} className={cn("relative overflow-hidden", className)} role="img" aria-label={alt}>
+      {Array.from({ length: slats }, (_, i) => (
+        <Slat key={i} i={i} n={slats} progress={scrollYProgress} src={src} sizes={sizes} />
+      ))}
+    </div>
+  );
+}
+function Slat({ i, n, progress, src, sizes }: { i: number; n: number; progress: MotionValue<number>; src: string; sizes: string }) {
+  const y = useTransform(progress, [0, 1], [`${(i % 2 ? -1 : 1) * (40 + i * 12)}%`, "0%"]);
+  const left = (i / n) * 100;
+  return (
+    <motion.div style={{ y, clipPath: `inset(0 ${100 - left - 100 / n - 0.15}% 0 ${left}%)` }} className="absolute inset-0">
+      <Img src={src} alt="" fill sizes={sizes} className="object-cover" />
+    </motion.div>
+  );
+}
+
+/** Card that tilts toward the pointer in 3D. */
+export function Tilt({ children, className, max = 8 }: { children: ReactNode; className?: string; max?: number }) {
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 200, damping: 20 });
+  const sry = useSpring(ry, { stiffness: 200, damping: 20 });
+  return (
+    <div style={{ perspective: 1000 }} className={className}>
+      <motion.div
+        style={{ rotateX: srx, rotateY: sry, transformStyle: "preserve-3d" }}
+        onPointerMove={(e) => {
+          if (e.pointerType !== "mouse") return;
+          const r = e.currentTarget.getBoundingClientRect();
+          ry.set(((e.clientX - r.left) / r.width - 0.5) * max * 2);
+          rx.set(-((e.clientY - r.top) / r.height - 0.5) * max * 2);
+        }}
+        onPointerLeave={() => {
+          rx.set(0);
+          ry.set(0);
+        }}
+        className="h-full"
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
+/** Slowly spinning circular text badge. */
+export function SpinBadge({ text, className, children }: { text: string; className?: string; children?: ReactNode }) {
+  const id = "spin-" + text.replace(/[^a-z]/gi, "").slice(0, 12);
+  return (
+    <div className={cn("relative grid h-32 w-32 place-items-center rounded-full bg-accent text-white md:h-40 md:w-40", className)}>
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full animate-[spin_18s_linear_infinite]">
+        <defs>
+          <path id={id} d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+        </defs>
+        <text className="fill-current text-[8.4px] font-semibold uppercase tracking-[0.2em]">
+          <textPath href={`#${id}`}>{text}</textPath>
+        </text>
+      </svg>
+      <div className="relative">{children}</div>
     </div>
   );
 }

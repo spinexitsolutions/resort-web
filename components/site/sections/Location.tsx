@@ -1,49 +1,68 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import type { SiteSettings } from "@/lib/types";
-import { PillButton, Reveal, SectionLabel, SplitReveal } from "../motion";
+import { H2, PillButton, Reveal, SectionLabel, SplitReveal } from "../motion";
 
 const STEPS = [
-  { t: "Fly", d: "Into Port Blair (IXZ) — direct from Delhi, Mumbai, Chennai, Kolkata & Bengaluru.", time: "2–3 hrs" },
-  { t: "Sail", d: "Our private ferry glides you across to Swaraj Dweep.", time: "90 min" },
-  { t: "Arrive", d: "A short drive through the forest, and your butler is waiting.", time: "15 min" },
+  { t: "Fly", d: "Into Port Blair (IXZ) — direct from Delhi, Mumbai, Chennai, Kolkata & Bengaluru.", time: "2–3 h", icon: "M2 16l20-6-20-6 4 6-4 6zm4-6h8" },
+  { t: "Sail", d: "Our private ferry glides you across to Swaraj Dweep.", time: "90 m", icon: "M3 17h18l-3 4H6l-3-4zm9-14v12M12 3l6 10H12" },
+  { t: "Arrive", d: "A short drive through the forest — your butler is waiting.", time: "15 m", icon: "M12 21s-7-6.5-7-12a7 7 0 1114 0c0 5.5-7 12-7 12zm0-9a3 3 0 100-6 3 3 0 000 6z" },
 ];
 
 export default function Location({ brand }: { brand: SiteSettings["brand"] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.5"] });
+  const line = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <section id="location" className="bg-paper py-24 md:py-36">
-      <div className="container-x grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <SectionLabel index="10">Getting here</SectionLabel>
-          <SplitReveal text="Far enough to feel it. Close enough to make it." className="mt-5 font-display text-[clamp(2.2rem,4.5vw,4rem)] leading-[0.98] tracking-[-0.02em]" italicWords={["feel"]} />
-          <ol className="mt-10 space-y-6">
+      <div className="container-x">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <SectionLabel index="10">Getting here</SectionLabel>
+            <SplitReveal text="Far enough to feel it. Close enough to make it." className={`mt-6 max-w-[14ch] ${H2}`} italicWords={["feel"]} />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <PillButton href="/contact" variant="accent">Arrange transfers</PillButton>
+            <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center rounded-full px-6 text-[0.95rem] font-semibold ring-1 ring-ink/20 hover:ring-ink">WhatsApp us</a>
+          </div>
+        </div>
+
+        {/* journey */}
+        <div ref={ref} className="relative mt-16 md:mt-20">
+          <div className="absolute left-[1.35rem] top-0 h-full w-0.5 bg-ink/10 md:left-0 md:top-[1.35rem] md:h-0.5 md:w-full">
+            <motion.div style={{ height: line }} className="w-full bg-accent md:hidden" />
+            <motion.div style={{ width: line }} className="hidden h-full bg-accent md:block" />
+          </div>
+          <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
             {STEPS.map((s, i) => (
-              <Reveal key={s.t} delay={i * 0.08} y={20}>
-                <li className="flex gap-5">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink font-mono text-xs text-paper">{i + 1}</span>
-                  <div className="flex-1 border-b border-line pb-6">
-                    <div className="flex items-baseline justify-between">
-                      <p className="font-display text-2xl">{s.t}</p>
-                      <p className="font-mono text-xs text-muted">{s.time}</p>
+              <Reveal key={s.t} delay={i * 0.15} y={20}>
+                <li className="flex gap-5 md:block">
+                  <span className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-white ring-8 ring-paper">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"><path d={s.icon} /></svg>
+                  </span>
+                  <div className="md:mt-8">
+                    <div className="flex items-baseline gap-3">
+                      <p className="font-display text-[clamp(2.6rem,5vw,4.5rem)] leading-none tracking-[-0.05em]">{s.t}</p>
+                      <span className="rounded-full bg-accent/15 px-2.5 py-1 text-xs font-semibold text-accent">{s.time}</span>
                     </div>
-                    <p className="mt-1 text-[0.95rem] text-muted">{s.d}</p>
+                    <p className="mt-3 max-w-xs text-muted">{s.d}</p>
                   </div>
                 </li>
               </Reveal>
             ))}
           </ol>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <PillButton href="/contact" variant="ink">Arrange transfers</PillButton>
-            <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center rounded-full border border-ink/20 px-6 text-[0.95rem] font-medium hover:border-ink">WhatsApp us</a>
-          </div>
         </div>
-        <Reveal className="md:col-span-7">
-          <div className="relative h-[420px] overflow-hidden rounded-[28px] ring-1 ring-line md:h-full md:min-h-[560px]">
-            <iframe title="Map" src={brand.mapEmbed} className="absolute inset-0 h-full w-full grayscale-[0.6] contrast-[1.05]" loading="lazy" />
-            <div className="glass absolute bottom-4 left-4 right-4 rounded-2xl p-4 md:right-auto md:max-w-xs">
-              <p className="font-medium">{brand.name}</p>
-              <p className="mt-1 text-sm text-muted">{brand.address}</p>
-              <p className="mt-2 font-mono text-xs text-muted">{brand.coordinates}</p>
+
+        <Reveal>
+          <div className="relative mt-16 h-[380px] overflow-hidden rounded-[32px] bg-mist md:h-[480px]">
+            <iframe title="Map" src={brand.mapEmbed} className="absolute inset-0 h-full w-full grayscale contrast-[1.1]" loading="lazy" />
+            <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2 rounded-[22px] bg-ink p-5 text-white md:right-auto md:max-w-sm">
+              <p className="font-display text-3xl tracking-[-0.04em]">{brand.name}</p>
+              <p className="text-sm text-white/70">{brand.address}</p>
+              <p className="text-xs font-semibold text-accent">{brand.coordinates}</p>
             </div>
           </div>
         </Reveal>
