@@ -88,42 +88,51 @@ export default async function Dashboard() {
 
   return (
     <div>
-      <div className="mb-8 flex flex-col gap-1">
-        <div className="eyebrow text-muted">{now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</div>
-        <h1 className="font-display text-[38px] leading-[1.05] tracking-tight md:text-[52px]">
-          {greet}. <span className="text-muted">Here’s {db.settings.brand.name} today.</span>
-        </h1>
-      </div>
+      {/* Hero banner */}
+      <section className="relative overflow-hidden rounded-[30px] bg-accent p-6 text-white md:p-9">
+        <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 aspect-square w-[420px] rounded-full border border-white/20" />
+        <div aria-hidden className="pointer-events-none absolute -right-8 -top-8 aspect-square w-[260px] rounded-full border border-white/15" />
+        <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <div className="inline-flex rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">
+              {now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
+            </div>
+            <h1 className="mt-5 max-w-[14ch] font-display text-[clamp(2.8rem,6.5vw,5.6rem)] leading-[0.84] tracking-[-0.055em]">
+              {greet}. <span className="text-ink">Here’s {db.settings.brand.name} today.</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-5 rounded-[24px] bg-ink p-4 pr-6">
+            <div className="relative grid place-items-center">
+              <Ring value={occupancy} size={96} />
+              <div className="absolute font-display text-2xl tracking-[-0.04em] tabular-nums">{Math.round(occupancy * 100)}%</div>
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-white/50">Occupancy tonight</div>
+              <div className="mt-1 font-display text-3xl leading-none tracking-[-0.04em]">
+                {inHouse.length}<span className="text-white/40">/{inventory}</span> <span className="text-base font-sans font-medium tracking-normal text-white/70">keys</span>
+              </div>
+              <div className="mt-2 text-xs text-white/60">
+                {arrivals.filter((a) => a.checkIn === today).length} arriving · {departures.filter((d) => d.checkOut === today).length} departing today
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* KPI grid */}
-      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-6">
-        <Card className="col-span-2 flex items-center gap-5 !border-ink !bg-ink p-5 text-paper lg:col-span-2 lg:row-span-1">
-          <div className="relative grid place-items-center">
-            <Ring value={occupancy} size={92} />
-            <div className="absolute text-xl font-semibold tabular-nums">{Math.round(occupancy * 100)}%</div>
-          </div>
-          <div>
-            <div className="text-[12.5px] text-paper/60">Occupancy tonight</div>
-            <div className="mt-1 text-[15px]">
-              <span className="font-semibold">{inHouse.length}</span> of {inventory} keys occupied
-            </div>
-            <div className="mt-2 text-xs text-paper/50">
-              {arrivals.filter((a) => a.checkIn === today).length} arriving · {departures.filter((d) => d.checkOut === today).length} departing today
-            </div>
-          </div>
-        </Card>
-        {kpis.slice(0, 4).map((k) => (
-          <Card key={k.label} className="p-4 md:p-5">
-            <div className="text-[12px] font-medium text-muted">{k.label}</div>
-            <div className="mt-2.5 text-[26px] font-semibold tracking-tight tabular-nums md:text-[28px]">{k.value}</div>
-            <div className={`mt-1 text-[11.5px] ${"up" in k ? (k.up ? "text-emerald-600" : "text-red-600") : "text-muted"}`}>{k.delta}</div>
+      <div className="mt-4 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
+        {kpis.slice(0, 4).map((k, i) => (
+          <Card key={k.label} className={`p-5 md:p-6 ${i === 0 ? "!bg-ink text-white" : ""}`}>
+            <div className={`text-[11.5px] font-semibold uppercase tracking-wider ${i === 0 ? "text-white/50" : "text-muted"}`}>{k.label}</div>
+            <div className="mt-4 font-display text-[2.6rem] leading-none tracking-[-0.05em] tabular-nums md:text-[3.4rem]">{k.value}</div>
+            <div className={`mt-2 inline-flex rounded-full px-2.5 py-1 text-[11.5px] font-semibold ${"up" in k ? (k.up ? "bg-lagoon/15 text-lagoon" : "bg-red-100 text-red-700") : i === 0 ? "bg-white/10 text-white/70" : "bg-ink/5 text-muted"}`}>{k.delta}</div>
           </Card>
         ))}
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <CardHeader title="Revenue" subtitle="By check-in month · last 6 months" action={<span className="text-sm font-semibold tabular-nums">{formatMoney(months.reduce((s, m) => s + m.value, 0))}</span>} />
+          <CardHeader title="Revenue" subtitle="By check-in month · last 6 months" action={<span className="rounded-full bg-accent px-3 py-1.5 text-sm font-bold tabular-nums text-white">{formatMoney(months.reduce((s, m) => s + m.value, 0))}</span>} />
           <BarChart data={months} />
         </Card>
         <Card>
@@ -134,7 +143,7 @@ export default async function Dashboard() {
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <Card>
-          <CardHeader title="Arrivals" subtitle="Next 7 days" action={<Link href="/admin/bookings" className="text-xs font-medium text-[color:var(--accent)]">View all</Link>} />
+          <CardHeader title="Arrivals" subtitle="Next 7 days" action={<Link href="/admin/bookings" className="rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white hover:bg-accent">View all</Link>} />
           <ul className="divide-y divide-line px-5 pb-3 pt-2">
             {arrivals.length === 0 && <li className="py-6 text-center text-sm text-muted">No arrivals this week</li>}
             {arrivals.map((b) => (
@@ -179,20 +188,20 @@ export default async function Dashboard() {
 
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">
-          <CardHeader title="Sales pipeline" subtitle={`${openLeads.length} open · ${formatMoney(pipelineValue)}`} action={<Link href="/admin/leads" className="text-xs font-medium text-[color:var(--accent)]">Open board</Link>} />
+          <CardHeader title="Sales pipeline" subtitle={`${openLeads.length} open · ${formatMoney(pipelineValue)}`} action={<Link href="/admin/leads" className="rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white hover:bg-accent">Open board</Link>} />
           <div className="space-y-2.5 p-5">
             {pipeline.map((p) => (
               <div key={p.stage} className="flex items-center gap-3">
                 <div className="w-20 shrink-0 text-[13px] capitalize text-muted">{p.stage}</div>
-                <div className="relative h-8 flex-1 overflow-hidden rounded-lg bg-mist">
+                <div className="relative h-9 flex-1 overflow-hidden rounded-full bg-ink/[0.05]">
                   <div
-                    className="absolute inset-y-0 left-0 rounded-lg"
+                    className="absolute inset-y-0 left-0 rounded-full"
                     style={{
                       width: `${Math.max(6, (p.count / maxStage) * 100)}%`,
-                      background: p.stage === "won" ? "#10b981" : p.stage === "lost" ? "#d4d4d8" : "color-mix(in oklab, var(--lagoon) 75%, white)",
+                      background: p.stage === "won" ? "var(--lagoon)" : p.stage === "lost" ? "color-mix(in oklab, var(--ink) 12%, transparent)" : p.stage === "new" ? "var(--accent)" : "var(--ink)",
                     }}
                   />
-                  <span className="absolute inset-y-0 left-3 flex items-center text-xs font-semibold text-ink">{p.count}</span>
+                  <span className={`absolute inset-y-0 left-3 flex items-center text-xs font-bold ${p.stage === "lost" ? "text-ink" : "text-white"}`}>{p.count}</span>
                 </div>
                 <div className="w-16 shrink-0 text-right text-xs tabular-nums text-muted">{compactMoney(p.value)}</div>
               </div>

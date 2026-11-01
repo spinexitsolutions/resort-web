@@ -72,7 +72,7 @@ export function ImagesInput({ value, onChange }: { value: string[]; onChange: (v
     <div className="space-y-3">
       <Reorder.Group axis="y" values={value} onReorder={onChange} className="space-y-2">
         {value.map((src, i) => (
-          <Reorder.Item key={src} value={src} className="flex items-center gap-2 rounded-xl border border-line bg-white p-2">
+          <Reorder.Item key={src} value={src} className="flex items-center gap-2 rounded-[18px] bg-white ring-1 ring-line p-2">
             <I.grip size={16} className="shrink-0 cursor-grab text-ink/30" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt="" className="h-12 w-16 shrink-0 rounded-lg object-cover" />
@@ -105,7 +105,7 @@ export function TagsInput({ value, onChange, placeholder = "Type and press Enter
     setText("");
   };
   return (
-    <div className="flex min-h-10 flex-wrap items-center gap-1.5 rounded-xl border border-line bg-white p-1.5 focus-within:ring-4 focus-within:ring-accent/15">
+    <div className="flex min-h-10 flex-wrap items-center gap-1.5 rounded-[18px] bg-white ring-1 ring-line p-1.5 focus-within:ring-4 focus-within:ring-accent/15">
       {value.map((t) => (
         <span key={t} className="flex items-center gap-1 rounded-full bg-mist py-1 pl-2.5 pr-1 text-xs">
           {t}

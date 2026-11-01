@@ -135,13 +135,13 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
               key={t.id}
               onClick={() => setTab(t.id)}
               className={cn(
-                "relative shrink-0 rounded-xl px-3.5 py-2 text-left text-[13.5px] transition lg:py-2.5",
-                tab === t.id ? "text-ink" : "text-ink/55 hover:text-ink max-lg:bg-white max-lg:ring-1 max-lg:ring-line",
+                "relative shrink-0 rounded-[18px] px-4 py-2 text-left text-[13.5px] transition lg:py-3",
+                tab === t.id ? "text-white" : "text-ink/60 hover:text-ink max-lg:bg-white max-lg:ring-1 max-lg:ring-line",
               )}
             >
-              {tab === t.id && <motion.span layoutId="settings-tab" className="absolute inset-0 rounded-xl bg-white shadow-sm ring-1 ring-line max-lg:bg-ink" transition={{ type: "spring", stiffness: 500, damping: 40 }} />}
-              <span className={cn("relative block font-medium", tab === t.id && "max-lg:text-paper", t.id === "danger" && "text-red-600")}>{t.label}</span>
-              <span className="relative hidden text-[11.5px] text-muted lg:block">{t.hint}</span>
+              {tab === t.id && <motion.span layoutId="settings-tab" className="absolute inset-0 rounded-[18px] bg-ink" transition={{ type: "spring", stiffness: 500, damping: 40 }} />}
+              <span className={cn("relative block font-semibold", t.id === "danger" && tab !== t.id && "text-red-600")}>{t.label}</span>
+              <span className={cn("relative hidden text-[11.5px] lg:block", tab === t.id ? "text-accent" : "text-muted")}>{t.hint}</span>
             </button>
           ))}
         </nav>
@@ -184,7 +184,7 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
                       ["lagoon", "Lagoon", "Secondary colour"],
                     ] as const
                   ).map(([k, label, hint]) => (
-                    <label key={k} className="flex items-center gap-3 rounded-2xl border border-line bg-white p-3">
+                    <label key={k} className="flex items-center gap-3 rounded-[22px] bg-white ring-1 ring-line p-3">
                       <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl ring-1 ring-line" style={{ background: s.theme[k] }}>
                         <input type="color" value={s.theme[k]} onChange={(e) => set(["theme", k], e.target.value)} className="absolute inset-0 h-full w-full cursor-pointer opacity-0" />
                       </span>
@@ -279,7 +279,7 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
                   </div>
                   <div className="space-y-2">
                     {s.navbar.links.map((l, i) => (
-                      <div key={i} className="rounded-2xl border border-line bg-white p-3">
+                      <div key={i} className="rounded-[22px] bg-white ring-1 ring-line p-3">
                         <div className="flex items-center gap-2">
                           <span className="w-5 text-center text-xs text-muted">{i + 1}</span>
                           <Input value={l.label} onChange={(e) => set(["navbar", "links", i, "label"], e.target.value)} placeholder="Label" className="flex-1" />
@@ -396,7 +396,7 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
                       key={sec.id}
                       value={sec}
                       whileDrag={{ scale: 1.02, boxShadow: "0 12px 30px rgba(0,0,0,.12)" }}
-                      className={cn("flex items-center gap-3 rounded-2xl border border-line bg-white px-3 py-2.5", !sec.enabled && "opacity-55")}
+                      className={cn("flex items-center gap-3 rounded-[22px] bg-white ring-1 ring-line px-3 py-2.5", !sec.enabled && "opacity-55")}
                     >
                       <I.grip size={18} className="shrink-0 cursor-grab text-ink/30 active:cursor-grabbing" />
                       <span className="w-5 text-xs tabular-nums text-muted">{i + 1}</span>
@@ -419,8 +419,8 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
               <Panel title="SEO & footer">
                 {txt(["seo", "title"], "Page title")}
                 {txt(["seo", "description"], "Meta description", { area: true })}
-                <div className="rounded-2xl border border-line bg-white p-4">
-                  <div className="text-xs text-emerald-700">aranya.resort</div>
+                <div className="rounded-[22px] bg-white ring-1 ring-line p-4">
+                  <div className="text-xs text-lagoon">aranya.resort</div>
                   <div className="truncate text-lg text-[#1a0dab]">{s.seo.title}</div>
                   <div className="line-clamp-2 text-sm text-muted">{s.seo.description}</div>
                 </div>
@@ -518,7 +518,7 @@ function ListEditor<T>({
       </div>
       <div className="space-y-2">
         {items.map((it, i) => (
-          <div key={i} className="flex items-center gap-2 rounded-2xl border border-line bg-white p-2">
+          <div key={i} className="flex items-center gap-2 rounded-[22px] bg-white ring-1 ring-line p-2">
             {render(it, (v) => onChange(items.map((x, j) => (j === i ? v : x))))}
             <ListControls i={i} n={items.length} onMove={(d) => onChange(swap(items, i, i + d))} onRemove={() => onChange(items.filter((_, j) => j !== i))} />
           </div>

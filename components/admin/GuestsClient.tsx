@@ -313,7 +313,7 @@ export function GuestsClient({ guests, bookings, inquiries }: { guests: Guest[];
             <Field label="City">
               <Input value={draft.city ?? ""} onChange={(e) => setDraft({ ...draft, city: e.target.value })} />
             </Field>
-            <div className={cn("col-span-2 flex items-center justify-between rounded-xl border border-line bg-white px-4 py-3")}>
+            <div className={cn("col-span-2 flex items-center justify-between rounded-[18px] bg-white ring-1 ring-line px-4 py-3")}>
               <span className="text-sm font-medium">VIP guest</span>
               <Toggle checked={!!draft.vip} onChange={(v) => setDraft({ ...draft, vip: v })} />
             </div>

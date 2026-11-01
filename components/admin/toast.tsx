@@ -41,7 +41,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             >
               <span
                 className={`grid h-5 w-5 place-items-center rounded-full ${
-                  t.tone === "error" ? "bg-red-500" : t.tone === "info" ? "bg-lagoon" : "bg-emerald-500"
+                  t.tone === "error" ? "bg-red-500" : t.tone === "info" ? "bg-lagoon" : "bg-lagoon"
                 }`}
               >
                 {t.tone === "error" ? <I.close size={12} strokeWidth={3} /> : <I.check size={12} strokeWidth={3} />}

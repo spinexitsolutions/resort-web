@@ -35,9 +35,9 @@ export function BarChart({ data, height = 220 }: { data: { label: string; value:
                   whileInView={{ height: `${(d.value / max) * 100}%` }}
                   viewport={{ once: true }}
                   transition={{ duration: 1.1, delay: i * 0.07, ease }}
-                  className="w-full rounded-t-[10px] rounded-b-[3px]"
+                  className="w-full rounded-[12px]"
                   style={{
-                    background: isLast ? "var(--accent)" : hover === i ? "var(--ink)" : "color-mix(in oklab, var(--ink) 16%, transparent)",
+                    background: isLast ? "var(--accent)" : hover === i ? "var(--ink)" : "color-mix(in oklab, var(--ink) 10%, transparent)",
                     transition: "background .25s",
                   }}
                 />
@@ -45,7 +45,7 @@ export function BarChart({ data, height = 220 }: { data: { label: string; value:
                   <motion.div
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-ink px-2.5 py-1.5 text-[11px] text-paper shadow-lg"
+                    className="absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-xl bg-ink px-3 py-2 text-[11px] text-white shadow-lg"
                   >
                     <div className="font-semibold">{formatMoney(d.value)}</div>
                     {d.sub && <div className="text-paper/60">{d.sub}</div>}
@@ -67,7 +67,7 @@ export function BarChart({ data, height = 220 }: { data: { label: string; value:
   );
 }
 
-const PALETTE = ["var(--ink)", "var(--accent)", "var(--lagoon)", "#8fa89b", "#d9c3a5", "#a3a3a3", "#6b7f8e"];
+const PALETTE = ["var(--accent)", "var(--ink)", "var(--lagoon)", "#C9A27E", "#5B6B73", "#E8B9A6", "#a3a3a3"];
 
 export function Donut({ data, centerLabel }: { data: { label: string; value: number }[]; centerLabel: string }) {
   const [hover, setHover] = useState<number | null>(null);
@@ -108,7 +108,7 @@ export function Donut({ data, centerLabel }: { data: { label: string; value: num
         </svg>
         <div className="absolute inset-0 grid place-items-center text-center">
           <div>
-            <div className="text-2xl font-semibold tabular-nums">{shown ? shown.value : total}</div>
+            <div className="font-display text-4xl leading-none tracking-[-0.05em] tabular-nums">{shown ? shown.value : total}</div>
             <div className="text-[11px] capitalize text-muted">{shown ? shown.label : centerLabel}</div>
           </div>
         </div>
@@ -138,14 +138,14 @@ export function HBars({ data }: { data: { label: string; value: number; meta: st
               {compactMoney(d.value)} · {d.meta}
             </span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-mist">
+          <div className="h-2.5 overflow-hidden rounded-full bg-ink/[0.05]">
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: `${(d.value / max) * 100}%` }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: i * 0.06, ease }}
               className="h-full rounded-full"
-              style={{ background: i === 0 ? "var(--accent)" : "var(--lagoon)" }}
+              style={{ background: i === 0 ? "var(--accent)" : "var(--ink)" }}
             />
           </div>
         </li>
@@ -159,7 +159,7 @@ export function Ring({ value, size = 44 }: { value: number; size?: number }) {
   const c = 2 * Math.PI * r;
   return (
     <svg width={size} height={size} viewBox="0 0 44 44" className="-rotate-90">
-      <circle cx="22" cy="22" r={r} fill="none" stroke="var(--mist)" strokeWidth="5" />
+      <circle cx="22" cy="22" r={r} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="5" />
       <motion.circle
         cx="22"
         cy="22"

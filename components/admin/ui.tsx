@@ -22,12 +22,12 @@ export const Button = forwardRef<HTMLButtonElement, BtnProps>(function Button(
       ref={ref}
       disabled={disabled || loading}
       className={cn(
-        "inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-medium transition-all duration-200 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2",
-        size === "sm" ? "h-8 px-3 text-[13px]" : "h-10 px-4 text-sm",
-        variant === "primary" && "bg-ink text-paper hover:bg-ink/85",
-        variant === "accent" && "bg-accent text-white hover:brightness-110",
-        variant === "secondary" && "border border-line bg-white text-ink hover:bg-mist",
-        variant === "ghost" && "text-ink/70 hover:bg-mist hover:text-ink",
+        "inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-semibold transition-all duration-200 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2",
+        size === "sm" ? "h-9 px-3.5 text-[13px]" : "h-11 px-5 text-sm",
+        variant === "primary" && "bg-ink text-white hover:bg-accent",
+        variant === "accent" && "bg-accent text-white shadow-[0_10px_24px_-12px_var(--accent)] hover:brightness-110",
+        variant === "secondary" && "bg-white text-ink ring-1 ring-line hover:ring-ink/30",
+        variant === "ghost" && "text-ink/70 hover:bg-ink/5 hover:text-ink",
         variant === "danger" && "bg-red-600 text-white hover:bg-red-700",
         className,
       )}
@@ -45,7 +45,7 @@ export function IconButton({ label, className, children, ...rest }: React.Button
       aria-label={label}
       title={label}
       className={cn(
-        "grid h-8 w-8 shrink-0 place-items-center rounded-full text-ink/60 transition hover:bg-mist hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-30",
+        "grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink/60 transition hover:bg-ink hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-30",
         className,
       )}
       {...rest}
@@ -58,13 +58,13 @@ export function IconButton({ label, className, children, ...rest }: React.Button
 /* ---------- Form controls ---------- */
 
 const control =
-  "w-full rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink placeholder:text-ink/35 transition focus:border-ink/30 focus:outline-none focus:ring-4 focus:ring-accent/15 md:text-sm";
+  "w-full rounded-[14px] border-0 bg-white px-4 text-[15px] font-medium text-ink ring-1 ring-line placeholder:font-normal placeholder:text-ink/35 transition focus:outline-none focus:ring-2 focus:ring-accent md:text-sm";
 
 export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(function Input(
   { className, ...rest },
   ref,
 ) {
-  return <input ref={ref} className={cn(control, "h-10", className)} {...rest} />;
+  return <input ref={ref} className={cn(control, "h-11", className)} {...rest} />;
 });
 
 export function Textarea({ className, ...rest }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
@@ -74,7 +74,7 @@ export function Textarea({ className, ...rest }: React.TextareaHTMLAttributes<HT
 export function Select({ className, children, ...rest }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <div className="relative">
-      <select className={cn(control, "h-10 appearance-none pr-9", className)} {...rest}>
+      <select className={cn(control, "h-11 appearance-none pr-9", className)} {...rest}>
         {children}
       </select>
       <I.down size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-ink/40" />
@@ -86,7 +86,7 @@ export function Field({ label, hint, children, className, as = "label" }: { labe
   const Tag = as;
   return (
     <Tag className={cn("block", className)}>
-      <span className="mb-1.5 block text-[13px] font-medium text-ink/75">{label}</span>
+      <span className="mb-1.5 block text-[11.5px] font-semibold uppercase tracking-wider text-ink/55">{label}</span>
       {children}
       {hint && <span className="mt-1 block text-xs text-muted">{hint}</span>}
     </Tag>
@@ -106,7 +106,7 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
       }}
       className={cn(
         "relative inline-flex h-[26px] w-[44px] shrink-0 items-center rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60",
-        checked ? "bg-emerald-500" : "bg-ink/15",
+        checked ? "bg-accent" : "bg-ink/15",
       )}
     >
       <motion.span
@@ -120,9 +120,9 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
 
 export function ToggleRow({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-white px-4 py-3">
+    <div className="flex items-center justify-between gap-4 rounded-[18px] bg-white px-4 py-3.5 ring-1 ring-line">
       <div>
-        <div className="text-sm font-medium">{label}</div>
+        <div className="text-sm font-semibold">{label}</div>
         {hint && <div className="text-xs text-muted">{hint}</div>}
       </div>
       <Toggle checked={checked} onChange={onChange} label={label} />
@@ -138,7 +138,7 @@ export function SearchInput({ value, onChange, placeholder = "Search…" }: { va
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={cn(control, "h-10 rounded-full bg-white pl-10")}
+        className={cn(control, "h-11 rounded-full bg-white pl-10")}
       />
     </div>
   );
@@ -146,12 +146,32 @@ export function SearchInput({ value, onChange, placeholder = "Search…" }: { va
 
 /* ---------- Layout bits ---------- */
 
-export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: React.ReactNode }) {
+export function PageHeader({ title, subtitle, actions, eyebrow }: { title: string; subtitle?: string; actions?: React.ReactNode; eyebrow?: string }) {
+  const words = title.split(" ");
   return (
-    <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-end md:justify-between">
+    <div className="mb-7 flex flex-col gap-5 md:mb-10 md:flex-row md:items-end md:justify-between">
       <div>
-        <h1 className="font-display text-[34px] leading-none tracking-tight md:text-[44px]">{title}</h1>
-        {subtitle && <p className="mt-2 text-sm text-muted">{subtitle}</p>}
+        {eyebrow && (
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white py-1 pl-1 pr-3 text-xs font-semibold ring-1 ring-line">
+            <span className="h-5 w-5 rounded-full bg-accent" />
+            {eyebrow}
+          </div>
+        )}
+        <h1 className="font-display text-[clamp(2.8rem,6vw,5.2rem)] leading-[0.84] tracking-[-0.055em]">
+          {words.map((w, i) => (
+            <span key={i} className="inline-block overflow-hidden pb-[0.06em] align-bottom">
+              <motion.span
+                initial={{ y: "110%" }}
+                animate={{ y: "0%" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                className={cn("inline-block", i === words.length - 1 && words.length > 1 && "text-accent")}
+              >
+                {w}
+              </motion.span>
+            </span>
+          )).flatMap((el, i) => (i ? [" ", el] : [el]))}
+        </h1>
+        {subtitle && <p className="mt-3 text-sm font-medium text-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>
@@ -160,7 +180,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
 
 export function Card({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("rounded-2xl border border-line bg-white", className)} {...rest}>
+    <div className={cn("rounded-[26px] bg-white ring-1 ring-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-20px_rgba(0,0,0,0.18)]", className)} {...rest}>
       {children}
     </div>
   );
@@ -170,8 +190,8 @@ export function CardHeader({ title, action, subtitle }: { title: string; subtitl
   return (
     <div className="flex items-start justify-between gap-3 px-5 pt-5">
       <div>
-        <h3 className="text-[15px] font-semibold tracking-tight">{title}</h3>
-        {subtitle && <p className="text-xs text-muted">{subtitle}</p>}
+        <h3 className="font-display text-[1.45rem] leading-none tracking-[-0.03em]">{title}</h3>
+        {subtitle && <p className="mt-1 text-xs text-muted">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -180,11 +200,11 @@ export function CardHeader({ title, action, subtitle }: { title: string; subtitl
 
 export function Empty({ title, body, action }: { title: string; body?: string; action?: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-white/60 px-6 py-16 text-center">
-      <div className="mb-3 grid h-12 w-12 place-items-center rounded-full bg-mist text-ink/50">
+    <div className="flex flex-col items-center justify-center rounded-[26px] border-2 border-dashed border-ink/10 bg-white/50 px-6 py-16 text-center">
+      <div className="mb-3 grid h-14 w-14 place-items-center rounded-full bg-accent text-white">
         <I.sparkle size={20} />
       </div>
-      <div className="font-medium">{title}</div>
+      <div className="font-display text-2xl tracking-[-0.03em]">{title}</div>
       {body && <p className="mt-1 max-w-sm text-sm text-muted">{body}</p>}
       {action && <div className="mt-4">{action}</div>}
     </div>
@@ -196,30 +216,30 @@ export function Skeleton({ className }: { className?: string }) {
 }
 
 const PILL: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  confirmed: "bg-sky-100 text-sky-800",
-  "checked-in": "bg-emerald-100 text-emerald-800",
-  "checked-out": "bg-zinc-100 text-zinc-700",
+  pending: "bg-accent/15 text-[color:var(--accent)]",
+  confirmed: "bg-ink text-white",
+  "checked-in": "bg-lagoon text-white",
+  "checked-out": "bg-ink/[0.07] text-ink/60",
   cancelled: "bg-red-100 text-red-700",
-  unpaid: "bg-red-50 text-red-700",
-  partial: "bg-amber-50 text-amber-800",
-  paid: "bg-emerald-50 text-emerald-700",
-  new: "bg-sky-100 text-sky-800",
-  contacted: "bg-violet-100 text-violet-800",
-  qualified: "bg-amber-100 text-amber-800",
-  proposal: "bg-orange-100 text-orange-800",
-  won: "bg-emerald-100 text-emerald-800",
-  lost: "bg-zinc-100 text-zinc-600",
-  active: "bg-emerald-50 text-emerald-700",
-  hidden: "bg-zinc-100 text-zinc-600",
-  vip: "bg-accent/15 text-[color:var(--accent)]",
+  unpaid: "bg-accent/15 text-[color:var(--accent)]",
+  partial: "bg-amber-100 text-amber-800",
+  paid: "bg-lagoon/15 text-lagoon",
+  new: "bg-accent text-white",
+  contacted: "bg-ink text-white",
+  qualified: "bg-lagoon text-white",
+  proposal: "bg-amber-100 text-amber-800",
+  won: "bg-lagoon/15 text-lagoon",
+  lost: "bg-ink/[0.07] text-ink/50",
+  active: "bg-lagoon/15 text-lagoon",
+  hidden: "bg-ink/[0.07] text-ink/50",
+  vip: "bg-accent text-white",
 };
 
 export function Pill({ tone, children, className }: { tone: string; children?: React.ReactNode; className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-[3px] text-[11.5px] font-medium capitalize",
+        "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[11.5px] font-semibold capitalize",
         PILL[tone] ?? "bg-mist text-ink/70",
         className,
       )}
@@ -239,15 +259,16 @@ export function Avatar({ name, size = 36, className }: { name: string; size?: nu
     .join("");
   let hash = 0;
   for (const c of name) hash = (hash * 31 + c.charCodeAt(0)) >>> 0;
-  const hue = hash % 360;
+  const palette = ["var(--accent)", "var(--ink)", "var(--lagoon)", "#C9A27E", "#5B6B73"];
+  const bg = palette[hash % palette.length];
   return (
     <span
-      className={cn("grid shrink-0 place-items-center rounded-full font-medium text-white", className)}
+      className={cn("grid shrink-0 place-items-center rounded-full font-semibold text-white", className)}
       style={{
         width: size,
         height: size,
         fontSize: size * 0.36,
-        background: `linear-gradient(135deg, hsl(${hue} 35% 52%), hsl(${(hue + 40) % 360} 40% 38%))`,
+        background: bg,
       }}
     >
       {initials}
@@ -303,7 +324,7 @@ export function Drawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-ink/30 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
             onClick={onClose}
           />
           <motion.aside
@@ -314,26 +335,26 @@ export function Drawer({
             style={isDesktop ? { width: `min(${width}px, 100vw)` } : undefined}
             className={cn(
               "absolute flex flex-col bg-paper shadow-2xl",
-              isDesktop ? "inset-y-2 right-2 rounded-[22px]" : "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-[26px]",
+              isDesktop ? "inset-y-3 right-3 rounded-[30px]" : "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-[30px]",
             )}
           >
             {!isDesktop && <div className="mx-auto mt-2.5 h-1.5 w-10 rounded-full bg-ink/15" />}
-            <header className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 md:px-6">
+            <header className="flex items-start justify-between gap-4 px-5 pb-4 pt-5 md:px-7 md:pt-7">
               <div className="min-w-0">
-                <h2 id={id} className="truncate text-lg font-semibold tracking-tight">
+                <h2 id={id} className="truncate font-display text-[2rem] leading-none tracking-[-0.04em]">
                   {title}
                 </h2>
-                {subtitle && <p className="truncate text-sm text-muted">{subtitle}</p>}
+                {subtitle && <p className="mt-1.5 truncate text-sm text-muted">{subtitle}</p>}
               </div>
-              <IconButton label="Close" onClick={onClose} className="bg-mist">
+              <IconButton label="Close" onClick={onClose} className="h-10 w-10 bg-ink text-white hover:bg-accent">
                 <I.close size={16} />
               </IconButton>
             </header>
-            <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 md:px-6" data-lenis-prevent>
+            <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-5 md:px-7" data-lenis-prevent>
               {children}
             </div>
             {footer && (
-              <footer className="flex items-center justify-end gap-2 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:px-6">
+              <footer className="flex items-center justify-end gap-2 border-t border-line bg-white/60 px-5 py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] md:rounded-b-[30px] md:px-7">
                 {footer}
               </footer>
             )}
@@ -363,12 +384,12 @@ export function useConfirm() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 420, damping: 32 }}
-            className="relative w-full max-w-sm rounded-[22px] bg-paper p-6 text-center shadow-2xl"
+            className="relative w-full max-w-sm rounded-[30px] bg-paper p-7 text-center shadow-2xl"
           >
-            <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-full bg-red-50 text-red-600">
+            <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-accent text-white">
               <I.trash size={20} />
             </div>
-            <p className="text-[15px] font-medium">{state.message}</p>
+            <p className="font-display text-2xl leading-tight tracking-[-0.03em]">{state.message}</p>
             <p className="mt-1 text-sm text-muted">This can’t be undone.</p>
             <div className="mt-5 grid grid-cols-2 gap-2">
               <Button onClick={() => close(false)} autoFocus>
@@ -401,23 +422,23 @@ export function Segmented<T extends string>({
 }) {
   const id = useId();
   return (
-    <div className={cn("no-scrollbar inline-flex max-w-full overflow-x-auto rounded-full bg-ink/[0.06] p-1", className)}>
+    <div className={cn("no-scrollbar inline-flex max-w-full overflow-x-auto rounded-full bg-white p-1 ring-1 ring-line", className)}>
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
           className={cn(
-            "relative whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors",
-            value === o.value ? "text-ink" : "text-ink/55 hover:text-ink",
+            "relative whitespace-nowrap rounded-full px-4 py-2 text-[13px] font-semibold transition-colors",
+            value === o.value ? "text-white" : "text-ink/55 hover:text-ink",
           )}
         >
           {value === o.value && (
-            <motion.span layoutId={`seg-${id}`} className="absolute inset-0 rounded-full bg-white shadow-sm" transition={{ type: "spring", stiffness: 500, damping: 38 }} />
+            <motion.span layoutId={`seg-${id}`} className="absolute inset-0 rounded-full bg-ink" transition={{ type: "spring", stiffness: 500, damping: 38 }} />
           )}
           <span className="relative">
             {o.label}
-            {o.count !== undefined && <span className="ml-1.5 text-ink/40">{o.count}</span>}
+            {o.count !== undefined && <span className={cn("ml-1.5", value === o.value ? "text-accent" : "text-ink/40")}>{o.count}</span>}
           </span>
         </button>
       ))}
@@ -432,7 +453,7 @@ export function Stat({ label, value, delta, icon }: { label: string; value: stri
         <span className="text-[12.5px] font-medium">{label}</span>
         {icon}
       </div>
-      <div className="mt-3 text-[26px] font-semibold tracking-tight md:text-[30px]">{value}</div>
+      <div className="mt-3 font-display text-[2.6rem] leading-none tracking-[-0.045em] md:text-[3rem]">{value}</div>
       {delta && <div className="mt-1 text-xs text-muted">{delta}</div>}
     </Card>
   );

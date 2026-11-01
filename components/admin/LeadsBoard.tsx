@@ -11,11 +11,11 @@ import { useToast } from "./toast";
 import { Avatar, Button, Drawer, Field, Input, PageHeader, Pill, SearchInput, Segmented, Select, Textarea, useConfirm } from "./ui";
 
 const STAGES: { id: LeadStage; label: string; color: string }[] = [
-  { id: "new", label: "New", color: "#0ea5e9" },
-  { id: "contacted", label: "Contacted", color: "#8b5cf6" },
-  { id: "qualified", label: "Qualified", color: "#f59e0b" },
-  { id: "proposal", label: "Proposal", color: "#f97316" },
-  { id: "won", label: "Won", color: "#10b981" },
+  { id: "new", label: "New", color: "var(--accent)" },
+  { id: "contacted", label: "Contacted", color: "var(--ink)" },
+  { id: "qualified", label: "Qualified", color: "var(--lagoon)" },
+  { id: "proposal", label: "Proposal", color: "#C9A27E" },
+  { id: "won", label: "Won", color: "#2E8B57" },
   { id: "lost", label: "Lost", color: "#a1a1aa" },
 ];
 const TYPES: Inquiry["type"][] = ["general", "wedding", "corporate", "spa", "dining", "stay"];
@@ -123,19 +123,18 @@ export function LeadsBoard({ inquiries }: { inquiries: Inquiry[] }) {
           setOver(null);
         }}
         className={cn(
-          "flex flex-col rounded-[20px] p-2 transition-colors",
-          mobile ? "w-full" : "w-[280px] shrink-0",
+          "flex flex-col rounded-[26px] p-2.5 transition-colors",
+          mobile ? "w-full" : "w-[290px] shrink-0",
           over === stage.id ? "bg-accent/10 ring-2 ring-accent/40" : "bg-ink/[0.035]",
         )}
       >
         {!mobile && (
           <div className="flex items-center justify-between px-2 pb-2 pt-1">
-            <div className="flex items-center gap-2 text-[13px] font-semibold">
-              <span className="h-2 w-2 rounded-full" style={{ background: stage.color }} />
-              {stage.label}
-              <span className="font-normal text-muted">{items.length}</span>
+            <div className="flex items-center gap-2">
+              <span className="font-display text-[1.5rem] leading-none tracking-[-0.04em]">{stage.label}</span>
+              <span className="grid h-6 min-w-6 place-items-center rounded-full px-1.5 text-[11px] font-bold text-white" style={{ background: stage.color }}>{items.length}</span>
             </div>
-            <span className="text-[11px] tabular-nums text-muted">{compactMoney(total)}</span>
+            <span className="rounded-full bg-white px-2 py-1 text-[11px] font-semibold tabular-nums ring-1 ring-line">{compactMoney(total)}</span>
           </div>
         )}
         <div className="flex min-h-[120px] flex-col gap-2">
@@ -159,7 +158,7 @@ export function LeadsBoard({ inquiries }: { inquiries: Inquiry[] }) {
                 onClick={() => setOpenId(r.id)}
                 onKeyDown={(e) => e.key === "Enter" && setOpenId(r.id)}
                 tabIndex={0}
-                className="cursor-grab rounded-2xl border border-line bg-white p-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 active:cursor-grabbing"
+                className="cursor-grab rounded-[22px] bg-white ring-1 ring-line p-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 active:cursor-grabbing"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="eyebrow rounded-full bg-mist px-2 py-0.5 text-[9.5px] text-ink/70">{r.type}</span>
@@ -224,7 +223,7 @@ export function LeadsBoard({ inquiries }: { inquiries: Inquiry[] }) {
               <button
                 key={s.id}
                 onClick={() => setMobileStage(s.id)}
-                className={cn("flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] font-medium", mobileStage === s.id ? "border-ink bg-ink text-paper" : "border-line bg-white")}
+                className={cn("flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] font-medium", mobileStage === s.id ? "border-accent bg-accent text-white" : "border-line bg-white")}
               >
                 <span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} />
                 {s.label} <span className="opacity-60">{n}</span>
@@ -284,7 +283,7 @@ export function LeadsBoard({ inquiries }: { inquiries: Inquiry[] }) {
                     onClick={() => move(lead.id, s.id)}
                     className={cn(
                       "flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2 text-[12.5px] font-medium transition",
-                      lead.stage === s.id ? "border-ink bg-ink text-paper" : "border-line bg-white hover:bg-mist",
+                      lead.stage === s.id ? "border-accent bg-accent text-white" : "border-line bg-white hover:bg-mist",
                     )}
                   >
                     <span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} />
@@ -330,7 +329,7 @@ export function LeadsBoard({ inquiries }: { inquiries: Inquiry[] }) {
                   </li>
                 ))}
                 <li className="relative">
-                  <span className="absolute -left-5 top-1.5 h-2.5 w-2.5 rounded-full bg-ink/30 ring-4 ring-paper" />
+                  <span className="absolute -left-5 top-1.5 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-paper" />
                   <p className="text-sm text-muted">Enquiry received</p>
                   <p className="text-[11px] text-muted">{formatDate(lead.createdAt)}</p>
                 </li>
