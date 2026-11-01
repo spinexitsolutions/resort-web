@@ -18,7 +18,7 @@ export default function GalleryStrip({ items }: { items: GalleryItem[] }) {
       <div className="container-x mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <SectionLabel index="07">Gallery</SectionLabel>
-          <SplitReveal text="A few frames from the island." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["frames"]} />
+          <SplitReveal text="A few frames from the island." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["frames"]} inlineImage={{ after: 2, src: items[2]?.src ?? "" }} />
         </div>
         <PillButton href="/gallery" variant="ghost" className="self-start md:self-auto">Open gallery</PillButton>
       </div>

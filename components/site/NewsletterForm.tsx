@@ -35,7 +35,7 @@ export default function NewsletterForm({ dark }: { dark?: boolean }) {
           aria-label="Email address"
           className={cn("h-11 min-w-0 flex-1 bg-transparent text-[0.95rem] outline-none", dark ? "placeholder:text-paper/35" : "placeholder:text-muted")}
         />
-        <button disabled={state === "loading"} className={cn("h-11 shrink-0 rounded-full px-5 text-sm font-medium transition-colors", dark ? "bg-paper text-ink hover:bg-accent" : "bg-ink text-paper hover:bg-lagoon")}>
+        <button disabled={state === "loading"} className={cn("h-11 shrink-0 rounded-full px-5 text-sm font-medium transition-colors", dark ? "bg-paper text-ink hover:bg-accent hover:text-white" : "bg-ink text-paper hover:bg-lagoon")}>
           {state === "loading" ? "…" : "Subscribe"}
         </button>
       </div>

@@ -28,7 +28,7 @@ export default function Rooms({ rooms }: { rooms: Room[] }) {
     <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
         <SectionLabel index="02">Rooms & Villas</SectionLabel>
-        <SplitReveal text="Six ways to wake up somewhere else." className="mt-5 max-w-[16ch] font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["somewhere", "else"]} />
+        <SplitReveal text="Six ways to wake up somewhere else." className="mt-5 max-w-[16ch] font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["somewhere", "else."]} inlineImage={{ after: 3, src: rooms[0]?.images[0] ?? "" }} />
       </div>
       <PillButton href="/rooms" variant="ghost" className="self-start md:self-auto">View all stays</PillButton>
     </div>

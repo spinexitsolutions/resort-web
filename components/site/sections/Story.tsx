@@ -1,20 +1,15 @@
 "use client";
 
 import type { SiteSettings } from "@/lib/types";
-import BookingBar from "../BookingBar";
 import Counter from "../Counter";
 import { Marquee, ParallaxImage, Reveal, ScrollText, SectionLabel } from "../motion";
 
 export default function Story({ story, brand }: { story: SiteSettings["story"]; brand: SiteSettings["brand"] }) {
   return (
     <section id="story" className="relative bg-paper pt-10 md:pt-0">
-      <div className="container-x md:hidden">
-        <BookingBar dark={false} />
-      </div>
-
       <Marquee
         items={["Overwater villas", "Rainforest suites", "Floating spa", "Barefoot dining", "Reef & ocean", "Since " + brand.established]}
-        className="eyebrow mt-14 border-y border-line py-5 text-muted md:mt-0"
+        className="mt-10 border-y border-line py-5 text-[clamp(1.5rem,3vw,2.5rem)] font-display font-semibold tracking-tight text-ink/80"
       />
 
       <div className="container-x grid gap-12 py-24 md:grid-cols-12 md:gap-8 md:py-40">

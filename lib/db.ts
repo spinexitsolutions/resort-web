@@ -40,7 +40,11 @@ export async function getDB(): Promise<Database> {
   if (data) {
     // merge any newly-added top level keys from the seed
     const seed = buildSeed();
-    cache = { ...seed, ...data, settings: { ...seed.settings, ...data.settings } };
+    const settings = { ...seed.settings, ...data.settings } as Record<string, unknown>;
+    for (const [k, v] of Object.entries(seed.settings))
+      if (v && typeof v === "object" && !Array.isArray(v))
+        settings[k] = { ...v, ...((data.settings as unknown as Record<string, object>)[k] ?? {}) };
+    cache = { ...seed, ...data, settings: settings as unknown as Database["settings"] };
   } else {
     cache = buildSeed();
     await writeFile(cache);

@@ -11,7 +11,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
   const b = settings.brand;
   return (
     <>
-      <PageHeader eyebrow="Contact · Concierge" title="Let's plan something lovely." italic={["lovely."]} />
+      <PageHeader eyebrow="Contact · Concierge" title="Let's plan something lovely." accent={["lovely."]} />
       <div className="container-x grid gap-16 py-16 md:grid-cols-12 md:py-24">
         <div className="md:col-span-7">
           <ContactForm initialType={type} initialSubject={subject} />

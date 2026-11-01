@@ -83,7 +83,7 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
             </motion.div>
             <div className="flex items-center justify-between text-paper" onClick={(e) => e.stopPropagation()}>
               <button onClick={() => setOpen((o) => (o! - 1 + list.length) % list.length)} className="rounded-full bg-white/10 px-4 py-2 text-sm">← Prev</button>
-              <p className="font-display text-xl italic">{list[open].caption}</p>
+              <p className="font-display text-xl">{list[open].caption}</p>
               <button onClick={() => setOpen((o) => (o! + 1) % list.length)} className="rounded-full bg-white/10 px-4 py-2 text-sm">Next →</button>
             </div>
           </motion.div>

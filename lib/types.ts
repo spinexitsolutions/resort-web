@@ -66,7 +66,11 @@ export interface SiteSettings {
     eyebrow: string;
     title: string;
     subtitle: string;
-    image: string;
+    image: string; // left / top panel (forest)
+    image2: string; // right / bottom panel (sea)
+    leftWord: string;
+    rightWord: string;
+    connector: string;
     video: string;
     ctaPrimary: string;
     ctaSecondary: string;

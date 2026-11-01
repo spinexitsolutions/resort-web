@@ -79,7 +79,7 @@ function IntroOverlay({ config, onDone }: { config: SiteSettings["intro"]; onDon
               initial={{ y: "100%", opacity: 0 }}
               animate={phase < 2 ? { y: "0%", opacity: 1 } : { y: "-100%", opacity: 0 }}
               transition={{ duration: 1, ease: EXPO, delay: phase < 2 ? 0.2 + i * 0.08 : i * 0.04 }}
-              className={i % 2 ? "italic text-accent" : ""}
+              className={i % 2 ? "text-accent" : ""}
             >
               {l}
             </motion.span>

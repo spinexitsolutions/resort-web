@@ -20,7 +20,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           <div className="md:col-span-5">
             <p className="eyebrow text-paper/50">Letters from the island</p>
             <h3 className="mt-4 font-display text-4xl leading-[1.05] tracking-tight md:text-5xl">
-              Slow news, <span className="italic text-accent">four times</span> a year.
+              Slow news, <span className="text-accent">four times</span> a year.
             </h3>
             <div className="mt-8 max-w-md">
               <NewsletterForm dark />
@@ -70,7 +70,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
       <motion.div style={{ scale }} className="container-x mt-16 origin-bottom select-none md:mt-24">
         <p aria-hidden className="text-center font-display text-[27vw] leading-[0.75] tracking-[-0.04em] text-paper/[0.92] md:text-[23vw]">
           {brand.name.slice(0, -1)}
-          <span className="italic text-accent">{brand.name.slice(-1)}</span>
+          <span className="text-accent">{brand.name.slice(-1)}</span>
         </p>
       </motion.div>
 

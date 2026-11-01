@@ -65,7 +65,7 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
                 )).flatMap((el, k) => (k ? [" ", el] : [el]))}
               </blockquote>
               <motion.figcaption initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.5 } }} exit={{ opacity: 0 }} className="mt-10 flex items-center gap-4">
-                <span className="grid h-12 w-12 place-items-center rounded-full bg-accent font-display text-xl text-ink">{t.name[0]}</span>
+                <span className="grid h-12 w-12 place-items-center rounded-full bg-accent font-display text-xl text-white">{t.name[0]}</span>
                 <span>
                   <span className="block font-medium">{t.name}</span>
                   <span className="text-sm text-paper/55">{t.location} · stayed in {t.stay}</span>

@@ -45,7 +45,7 @@ export default function ExperienceGrid({ items }: { items: Experience[] }) {
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                   <span className="text-sm">from {formatMoney(e.price)}</span>
-                  <Link href={`/contact?type=general&subject=${encodeURIComponent(e.title)}`} className="rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent">
+                  <Link href={`/contact?type=general&subject=${encodeURIComponent(e.title)}`} className="rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-accent hover:text-white">
                     Enquire
                   </Link>
                 </div>

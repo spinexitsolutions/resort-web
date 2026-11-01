@@ -10,7 +10,7 @@ export default async function Page() {
   const items = db.dining.filter((d) => d.active);
   return (
     <>
-      <PageHeader eyebrow="Dining" title="Eat like an islander." italic={["islander."]} intro="Four kitchens, one pantry: our organic farm, the morning catch and the forest." image={items[0]?.image} />
+      <PageHeader eyebrow="Dining" title="Eat like an islander." accent={["islander."]} intro="Four kitchens, one pantry: our organic farm, the morning catch and the forest." image={items[0]?.image} />
       <div className="container-x space-y-24 py-24 md:space-y-40 md:py-36">
         {items.map((d, i) => (
           <section key={d.id} className="grid items-center gap-10 md:grid-cols-12 md:gap-16">

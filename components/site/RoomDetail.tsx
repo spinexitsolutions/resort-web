@@ -37,7 +37,7 @@ export default function RoomDetail({ room, others, checkIn: ci, checkOut: co }: 
         </nav>
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <SplitReveal as="h1" text={room.name} delay={0.3} className="max-w-[14ch] font-display text-[clamp(2.8rem,8vw,7rem)] leading-[0.92] tracking-[-0.03em]" />
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="font-display text-2xl italic text-accent md:text-3xl">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="font-display text-2xl text-accent md:text-3xl">
             {room.tagline}
           </motion.p>
         </div>

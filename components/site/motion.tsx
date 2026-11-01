@@ -24,26 +24,46 @@ export function Reveal({ children, delay = 0, y = 40, className, once = true }: 
   );
 }
 
-/** Masked line-by-word reveal for headlines. */
-export function SplitReveal({ text, className, delay = 0, stagger = 0.045, as: Tag = "h2", italicWords = [] }: { text: string; className?: string; delay?: number; stagger?: number; as?: "h1" | "h2" | "h3" | "p" | "span"; italicWords?: string[] }) {
+/** Masked word-by-word reveal for headlines. `italicWords` are highlighted in the accent colour;
+ *  `inlineImage` drops a small rounded photo pill after the given word index. */
+export function SplitReveal({ text, className, delay = 0, stagger = 0.045, as: Tag = "h2", italicWords = [], inlineImage }: { text: string; className?: string; delay?: number; stagger?: number; as?: "h1" | "h2" | "h3" | "p" | "span"; italicWords?: string[]; inlineImage?: { after: number; src: string } }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const words = text.split(" ");
   const MotionTag = motion[Tag];
+  const nodes: ReactNode[] = [];
+  words.forEach((w, i) => {
+    if (i) nodes.push(" ");
+    nodes.push(
+      <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom">
+        <motion.span
+          className={cn("inline-block will-change-transform", italicWords.includes(w.replace(/[^\w']/g, "")) || italicWords.includes(w) ? "text-accent" : "")}
+          initial={{ y: "110%" }}
+          animate={inView ? { y: "0%" } : undefined}
+          transition={{ duration: 1.1, ease: EXPO, delay: delay + i * stagger }}
+        >
+          {w}
+        </motion.span>
+      </span>,
+    );
+    if (inlineImage && inlineImage.after === i)
+      nodes.push(
+        " ",
+        <motion.span
+          key="img"
+          aria-hidden
+          className="relative inline-block h-[0.78em] w-[1.7em] overflow-hidden rounded-full align-[-0.06em]"
+          initial={{ width: "0em", opacity: 0 }}
+          animate={inView ? { width: "1.7em", opacity: 1 } : undefined}
+          transition={{ duration: 1.2, ease: EXPO, delay: delay + (i + 1) * stagger + 0.2 }}
+        >
+          <Img src={inlineImage.src} alt="" fill sizes="160px" className="object-cover" />
+        </motion.span>,
+      );
+  });
   return (
     <MotionTag ref={ref as never} className={cn("text-balance", className)} aria-label={text}>
-      {words.map((w, i) => (
-        <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom">
-          <motion.span
-            className={cn("inline-block will-change-transform", italicWords.includes(w.replace(/[^\w]/g, "")) && "italic text-accent")}
-            initial={{ y: "110%", rotate: 4 }}
-            animate={inView ? { y: "0%", rotate: 0 } : undefined}
-            transition={{ duration: 1.1, ease: EXPO, delay: delay + i * stagger }}
-          >
-            {w}
-          </motion.span>
-        </span>
-      )).flatMap((el, i) => (i ? [" ", el] : [el]))}
+      {nodes}
     </MotionTag>
   );
 }
@@ -140,7 +160,7 @@ export function PillButton({ href, children, variant = "ink", className, onClick
   const styles = {
     ink: "bg-ink text-paper",
     paper: "bg-paper text-ink",
-    accent: "bg-accent text-ink",
+    accent: "bg-accent text-white",
     ghost: "border border-ink/20 text-ink hover:border-ink",
     "ghost-light": "border border-white/35 text-white hover:border-white",
   }[variant];
@@ -182,10 +202,16 @@ export function Arrow({ className }: { className?: string }) {
 
 export function SectionLabel({ index, children, light }: { index?: string; children: ReactNode; light?: boolean }) {
   return (
-    <div className={cn("eyebrow flex items-center gap-3", light ? "text-white/70" : "text-muted")}>
-      {index && <span className={light ? "text-white" : "text-ink"}>{index}</span>}
-      <span className={cn("h-px w-8", light ? "bg-white/40" : "bg-ink/25")} />
-      <span>{children}</span>
+    <div
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full py-1 pl-1 pr-3.5 text-[0.8rem] font-medium tracking-tight ring-1",
+        light ? "bg-white/[0.06] text-white/85 ring-white/15" : "bg-white/60 text-ink/80 ring-line",
+      )}
+    >
+      <span className="grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-[0.7rem] font-semibold tabular-nums text-white">
+        {index ?? "●"}
+      </span>
+      {children}
     </div>
   );
 }
@@ -198,7 +224,7 @@ export function Marquee({ items, className }: { items: string[]; className?: str
         {row.map((t, i) => (
           <span key={i} className="flex items-center">
             <span className="px-6 md:px-10">{t}</span>
-            <span className="text-accent">✦</span>
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
           </span>
         ))}
       </div>

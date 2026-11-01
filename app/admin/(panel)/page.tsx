@@ -91,7 +91,7 @@ export default async function Dashboard() {
       <div className="mb-8 flex flex-col gap-1">
         <div className="eyebrow text-muted">{now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</div>
         <h1 className="font-display text-[38px] leading-[1.05] tracking-tight md:text-[52px]">
-          {greet}. <span className="italic text-muted">Here’s {db.settings.brand.name} today.</span>
+          {greet}. <span className="text-muted">Here’s {db.settings.brand.name} today.</span>
         </h1>
       </div>
 

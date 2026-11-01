@@ -12,7 +12,7 @@ export default async function RoomsPage() {
       <PageHeader
         eyebrow="Stay · 41 villas & suites"
         title="Rooms with a point of view."
-        italic={["point", "view."]}
+        accent={["point", "view."]}
         intro="Overwater, under the canopy or on the cliff edge — every stay includes breakfast, butler service and transfers from the jetty."
         image={db.rooms.find((r) => r.featured)?.images[0]}
       />

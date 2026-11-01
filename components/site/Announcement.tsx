@@ -8,7 +8,7 @@ export default function Announcement({ data }: { data: SiteSettings["announcemen
   const [show, setShow] = useState(true);
   if (!data.enabled || !show) return null;
   return (
-    <div className="relative z-30 bg-accent text-ink">
+    <div className="relative z-30 bg-accent text-white">
       <div className="container-x flex h-9 items-center justify-center gap-3 text-center text-[0.8rem]">
         <Link href={data.link || "#"} className="truncate font-medium underline-offset-4 hover:underline">
           {data.text}

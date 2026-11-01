@@ -146,7 +146,7 @@ export default function Navbar({ brand, nav, belowBanner }: Props) {
                     <circle cx="22" cy="22" r="20" fill="none" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1.5" />
                     <motion.circle cx="22" cy="22" r="20" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" style={{ pathLength: progress }} />
                   </svg>
-                  <span className="font-display text-xl italic leading-none">{brand.name[0]}</span>
+                  <span className="font-display text-xl leading-none">{brand.name[0]}</span>
                 </Link>
 
                 <motion.div
@@ -205,7 +205,7 @@ export default function Navbar({ brand, nav, belowBanner }: Props) {
                   className="group relative flex h-11 items-center overflow-hidden rounded-full bg-paper px-5 text-sm font-medium text-ink"
                 >
                   <span className="absolute inset-0 translate-y-full rounded-full bg-accent transition-transform duration-500 ease-expo group-hover:translate-y-0" />
-                  <span className="relative">{nav.ctaLabel}</span>
+                  <span className="relative transition-colors duration-500 group-hover:text-white">{nav.ctaLabel}</span>
                 </Link>
               </motion.div>
             ) : (
@@ -248,7 +248,7 @@ export default function Navbar({ brand, nav, belowBanner }: Props) {
                           <span
                             className={cn(
                               "font-display text-[2.1rem] leading-none tracking-tight transition-all duration-500 ease-expo md:text-5xl",
-                              hover === i ? "translate-x-2 italic text-accent" : "text-paper",
+                              hover === i ? "translate-x-2 text-accent" : "text-paper",
                             )}
                           >
                             {l.label}
@@ -273,7 +273,7 @@ export default function Navbar({ brand, nav, belowBanner }: Props) {
                         </motion.div>
                       </AnimatePresence>
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-5">
-                        <span className="font-display text-2xl italic">{links[hover]?.label}</span>
+                        <span className="font-display text-2xl">{links[hover]?.label}</span>
                       </div>
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export default function Navbar({ brand, nav, belowBanner }: Props) {
                     <Link
                       href="/book"
                       onClick={() => setOpen(false)}
-                      className="flex h-11 flex-1 items-center justify-center rounded-full bg-paper font-medium text-ink transition-colors hover:bg-accent"
+                      className="flex h-11 flex-1 items-center justify-center rounded-full bg-paper font-medium text-ink transition-colors hover:bg-accent hover:text-white"
                     >
                       {nav.ctaLabel} your stay
                     </Link>

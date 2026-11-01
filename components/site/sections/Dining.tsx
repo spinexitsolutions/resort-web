@@ -19,7 +19,7 @@ export default function Dining({ items }: { items: DiningT[] }) {
       <div className="container-x grid gap-10 md:grid-cols-12">
         <div className="md:col-span-4">
           <SectionLabel index="04">Dining</SectionLabel>
-          <SplitReveal text="Four kitchens. One island pantry." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["island"]} />
+          <SplitReveal text="Four kitchens. One island pantry." className="mt-5 font-display text-[clamp(2.4rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["island", "pantry."]} inlineImage={{ after: 1, src: items[0]?.image ?? "" }} />
           <p className="mt-6 max-w-sm text-muted">Half of what we serve is grown, caught or foraged within a few kilometres of your table.</p>
           <PillButton href="/dining" variant="ghost" className="mt-8">Explore dining</PillButton>
         </div>
@@ -56,7 +56,7 @@ export default function Dining({ items }: { items: DiningT[] }) {
               <li key={d.id} className="border-b border-line" onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}>
                 <button onClick={() => setOpen(open === i ? -1 : i)} className="group flex w-full items-center gap-5 py-6 text-left md:py-8">
                   <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
-                  <span className={cn("flex-1 font-display text-4xl tracking-tight transition-all duration-500 ease-expo md:text-6xl", active === i && "md:translate-x-3 md:italic")}>{d.name}</span>
+                  <span className={cn("flex-1 font-display text-4xl tracking-tight transition-all duration-500 ease-expo md:text-6xl", active === i && "md:translate-x-3")}>{d.name}</span>
                   <span className="hidden text-right text-sm text-muted sm:block">
                     {d.cuisine}
                     <br />

@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import { getDB } from "@/lib/db";
 import "./globals.css";
 
-const sans = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
+const sans = Instrument_Sans({ subsets: ["latin"], axes: ["wdth"], variable: "--font-body", display: "swap" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["opsz", "wdth"], variable: "--font-head", display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getDB();
@@ -17,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0e1a16",
+  themeColor: "#121417",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -27,14 +26,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { settings } = await getDB();
   const c = (v: string, fallback: string) => (/^#[0-9a-fA-F]{3,8}$|^(rgb|hsl|oklch)\([\d\s.,%/]+\)$/.test(v?.trim() ?? "") ? v.trim() : fallback);
   const t = {
-    paper: c(settings.theme.paper, "#F3EFE7"),
-    ink: c(settings.theme.ink, "#0E1A16"),
-    accent: c(settings.theme.accent, "#C08A4E"),
-    lagoon: c(settings.theme.lagoon, "#1F5C57"),
+    paper: c(settings.theme.paper, "#F2EEE8"),
+    ink: c(settings.theme.ink, "#121417"),
+    accent: c(settings.theme.accent, "#FF5B2E"),
+    lagoon: c(settings.theme.lagoon, "#0D4F4A"),
   };
   const vars = `:root{--paper:${t.paper};--ink:${t.ink};--accent:${t.accent};--lagoon:${t.lagoon};}`;
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
         <style dangerouslySetInnerHTML={{ __html: vars }} />
       </head>

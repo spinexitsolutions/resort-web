@@ -12,7 +12,7 @@ export function OfferCard({ o }: { o: Offer }) {
     <article className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-white ring-1 ring-line">
       <div className="relative aspect-[16/11] overflow-hidden">
         <Img src={o.image} alt={o.title} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover transition-transform duration-[1.4s] ease-expo group-hover:scale-105" />
-        <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-ink">{o.badge}</span>
+        <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-white">{o.badge}</span>
       </div>
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-display text-3xl tracking-tight">{o.title}</h3>

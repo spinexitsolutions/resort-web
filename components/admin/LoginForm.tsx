@@ -53,7 +53,7 @@ export function LoginForm({ brand, tagline, image }: { brand: string; tagline: s
         >
           <div className="eyebrow text-paper/70">Control room</div>
           <div className="mt-2 font-display text-5xl leading-none md:text-7xl">{brand}</div>
-          <div className="mt-2 font-display text-xl italic text-paper/80 md:text-2xl">{tagline}</div>
+          <div className="mt-2 font-display text-xl text-paper/80 md:text-2xl">{tagline}</div>
         </motion.div>
       </div>
 

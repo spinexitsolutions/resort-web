@@ -15,7 +15,7 @@ export default function Experiences({ items }: { items: Experience[] }) {
       <div className="container-x flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <SectionLabel index="03" light>Experiences</SectionLabel>
-          <SplitReveal text="Days you'll still be telling stories about." className="mt-5 max-w-[15ch] font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["stories"]} />
+          <SplitReveal text="Days you'll still be telling stories about." className="mt-5 max-w-[15ch] font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.025em]" italicWords={["stories"]} inlineImage={{ after: 1, src: items[1]?.image ?? items[0]?.image ?? "" }} />
         </div>
         <PillButton href="/experiences" variant="ghost-light" className="self-start md:self-auto">All experiences</PillButton>
       </div>

@@ -322,7 +322,13 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
                   {txt(["hero", "ctaPrimary"], "Primary button")}
                   {txt(["hero", "ctaSecondary"], "Secondary button")}
                 </Grid>
-                {img(["hero", "image"], "Background image")}
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {txt(["hero", "leftWord"], "Left word", { hint: "e.g. Forest" })}
+                  {txt(["hero", "connector"], "Connector", { hint: "Shown on the divider" })}
+                  {txt(["hero", "rightWord"], "Right word", { hint: "e.g. Sea" })}
+                </div>
+                {img(["hero", "image"], "Left / top image")}
+                {img(["hero", "image2"], "Right / bottom image")}
                 {txt(["hero", "video"], "Background video URL (optional)", { hint: "MP4 — overrides the image when set" })}
               </Panel>
             )}
@@ -554,7 +560,7 @@ function IntroPreview({ intro, theme }: { intro: SiteSettings["intro"]; theme: S
             </div>
           </div>
         )}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ delay: d * 0.3 }} className="absolute inset-x-0 bottom-5 text-center font-display text-sm italic" style={{ color: theme.paper }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ delay: d * 0.3 }} className="absolute inset-x-0 bottom-5 text-center font-display text-sm" style={{ color: theme.paper }}>
           {intro.subtext}
         </motion.div>
       </motion.div>

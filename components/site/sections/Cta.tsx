@@ -18,7 +18,7 @@ export default function Cta({ image }: { image: string }) {
       <div className="container-x relative text-center">
         <p className="eyebrow text-paper/60">Book direct · Best rate guaranteed</p>
         <h2 className="mx-auto mt-6 max-w-[14ch] font-display text-[clamp(2.8rem,8vw,7.5rem)] leading-[0.9] tracking-[-0.03em]">
-          Your villa is <span className="italic text-accent">waiting.</span>
+          Your villa is <span className="text-accent">waiting.</span>
         </h2>
         <div className="mx-auto mt-12 max-w-3xl text-left">
           <BookingBar />

@@ -48,7 +48,7 @@ export default function BookingBar({ className, dark = true }: { className?: str
           <button type="button" aria-label="More guests" onClick={() => setGuests((g) => Math.min(8, g + 1))} className={cn("grid h-7 w-7 place-items-center rounded-full ring-1", dark ? "ring-white/25" : "ring-line")}>+</button>
         </div>
       </div>
-      <button className="group col-span-2 flex h-14 items-center justify-center gap-2 rounded-[20px] bg-accent px-7 font-medium text-ink transition-transform active:scale-[0.98] md:col-span-1 md:h-auto md:rounded-full">
+      <button className="group col-span-2 flex h-14 items-center justify-center gap-2 rounded-[20px] bg-accent px-7 font-semibold text-white transition-transform active:scale-[0.98] md:col-span-1 md:h-auto md:rounded-full">
         Check availability
         <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M2 8h12M9 3l5 5-5 5" /></svg>
       </button>

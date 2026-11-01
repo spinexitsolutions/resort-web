@@ -83,7 +83,7 @@ export default function BookingFlow(props: { checkIn?: string; checkOut?: string
                 onClick={() => setStep(i)}
                 className={cn("flex items-center gap-2 text-sm transition-colors", i <= step ? "text-ink" : "text-muted")}
               >
-                <span className={cn("grid h-7 w-7 place-items-center rounded-full text-xs transition-colors", i < step ? "bg-accent text-ink" : i === step ? "bg-ink text-paper" : "ring-1 ring-line")}>
+                <span className={cn("grid h-7 w-7 place-items-center rounded-full text-xs transition-colors", i < step ? "bg-accent text-white" : i === step ? "bg-ink text-paper" : "ring-1 ring-line")}>
                   {i < step ? "✓" : i + 1}
                 </span>
                 <span className="hidden sm:inline">{s}</span>
@@ -102,7 +102,7 @@ export default function BookingFlow(props: { checkIn?: string; checkOut?: string
             {step === 0 && (
               <div>
                 <h1 className="font-display text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.95] tracking-[-0.03em]">
-                  When are you <span className="italic text-accent">coming?</span>
+                  When are you <span className="text-accent">coming?</span>
                 </h1>
                 <div className="mt-10 grid gap-3 sm:grid-cols-2">
                   <Field label="Arrive"><input type="date" value={checkIn} min={today} onChange={(e) => { setCheckIn(e.target.value); if (e.target.value >= checkOut) setCheckOut(iso(new Date(new Date(e.target.value).getTime() + 2 * 86400000))); }} className="w-full bg-transparent text-xl outline-none" /></Field>
@@ -208,9 +208,9 @@ export default function BookingFlow(props: { checkIn?: string; checkOut?: string
 
             {step === 3 && booking && (
               <div className="mx-auto max-w-2xl text-center">
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 14, delay: 0.2 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-accent text-3xl text-ink">✓</motion.div>
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 14, delay: 0.2 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-accent text-3xl text-white">✓</motion.div>
                 <h1 className="mt-8 font-display text-[clamp(2.6rem,7vw,5rem)] leading-[0.95] tracking-[-0.03em]">
-                  See you soon, <span className="italic text-accent">{booking.guestName.split(" ")[0]}.</span>
+                  See you soon, <span className="text-accent">{booking.guestName.split(" ")[0]}.</span>
                 </h1>
                 <p className="mx-auto mt-5 max-w-md text-muted">Your request is in. A confirmation is on its way to {booking.email}.</p>
                 <div className="mt-10 rounded-[24px] bg-white p-6 text-left ring-1 ring-line">
