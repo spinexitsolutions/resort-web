@@ -12,7 +12,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const { settings } = await getDB();
   return (
     <SmoothScroll>
-      <Intro config={settings.intro}>
+      <Intro config={settings.intro} images={[settings.hero.image, settings.hero.image2]}>
         <Announcement data={settings.announcement} />
         <Navbar brand={settings.brand} nav={settings.navbar} belowBanner={settings.announcement.enabled} />
         <main>{children}</main>

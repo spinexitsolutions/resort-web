@@ -13,8 +13,22 @@ import type { Activity, CollectionKey, Database } from "./types";
 const PRIMARY = path.join(process.cwd(), "data", "db.json");
 const FALLBACK = path.join(os.tmpdir(), "aranya-db.json");
 
-let cache: Database | null = null;
-let queue: Promise<unknown> = Promise.resolve();
+/**
+ * Next can load this module more than once (route handlers and pages live in
+ * different bundles), so the cache lives on globalThis and is re-validated
+ * against the file's mtime — every reader sees writes immediately.
+ */
+const G = globalThis as unknown as { __aranyaDB?: { data: Database | null; mtime: number; queue: Promise<unknown> } };
+const store = (G.__aranyaDB ??= { data: null, mtime: 0, queue: Promise.resolve() });
+
+async function mtimeOf() {
+  for (const p of [FALLBACK, PRIMARY]) {
+    try {
+      return (await fs.stat(p)).mtimeMs;
+    } catch {}
+  }
+  return 0;
+}
 
 async function readFile(p: string): Promise<Database | null> {
   try {
@@ -32,10 +46,13 @@ async function writeFile(data: Database) {
   } catch {
     await fs.writeFile(FALLBACK, json);
   }
+  store.mtime = await mtimeOf();
 }
 
 export async function getDB(): Promise<Database> {
-  if (cache) return cache;
+  const mtime = await mtimeOf();
+  if (store.data && mtime === store.mtime) return store.data;
+  store.mtime = mtime;
   const data = (await readFile(FALLBACK)) ?? (await readFile(PRIMARY));
   if (data) {
     // merge any newly-added top level keys from the seed
@@ -44,23 +61,23 @@ export async function getDB(): Promise<Database> {
     for (const [k, v] of Object.entries(seed.settings))
       if (v && typeof v === "object" && !Array.isArray(v))
         settings[k] = { ...v, ...((data.settings as unknown as Record<string, object>)[k] ?? {}) };
-    cache = { ...seed, ...data, settings: settings as unknown as Database["settings"] };
+    store.data = { ...seed, ...data, settings: settings as unknown as Database["settings"] };
   } else {
-    cache = buildSeed();
-    await writeFile(cache);
+    store.data = buildSeed();
+    await writeFile(store.data);
   }
-  return cache;
+  return store.data;
 }
 
 /** Serialised mutation helper — avoids lost writes on concurrent requests. */
 export function mutate<T>(fn: (db: Database) => T | Promise<T>): Promise<T> {
-  const run = queue.then(async () => {
+  const run = store.queue.then(async () => {
     const db = await getDB();
     const result = await fn(db);
     await writeFile(db);
     return result;
   });
-  queue = run.catch(() => undefined);
+  store.queue = run.catch(() => undefined);
   return run;
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { IntroOverlay } from "@/components/site/Intro";
 import { AnimatePresence, motion, Reorder } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -245,13 +246,13 @@ export function SettingsClient({ settings: initial }: { settings: SiteSettings }
                     value={s.intro.style}
                     onChange={(v) => set(["intro", "style"], v)}
                     options={[
-                      { value: "curtain", label: "Curtain reveal" },
-                      { value: "counter", label: "Counter" },
-                      { value: "letters", label: "Letters" },
+                      { value: "curtain", label: "Forest | Sea split" },
+                      { value: "counter", label: "Big counter" },
+                      { value: "letters", label: "Letter stickers" },
                     ]}
                   />
                 </Field>
-                <IntroPreview intro={s.intro} theme={s.theme} />
+                <IntroPreview intro={s.intro} theme={s.theme} hero={s.hero} />
                 <Grid>
                   {txt(["intro", "text"], "Headline")}
                   {txt(["intro", "subtext"], "Subtext")}
@@ -528,70 +529,41 @@ function ListEditor<T>({
   );
 }
 
-function IntroPreview({ intro, theme }: { intro: SiteSettings["intro"]; theme: SiteSettings["theme"] }) {
+function IntroPreview({ intro, theme, hero }: { intro: SiteSettings["intro"]; theme: SiteSettings["theme"]; hero: SiteSettings["hero"] }) {
   const [run, setRun] = useState(0);
-  const d = Math.max(1.2, intro.duration);
+  const [playing, setPlaying] = useState(true);
+  const vars = { "--accent": theme.accent, "--ink": theme.ink, "--paper": theme.paper, "--lagoon": theme.lagoon } as React.CSSProperties;
   return (
-    <div className="relative aspect-[16/9] overflow-hidden rounded-[20px] ring-1 ring-line" style={{ background: theme.ink }}>
+    <div className="relative aspect-[16/9] overflow-hidden rounded-[22px] bg-ink ring-1 ring-line" style={vars}>
+      {/* what's revealed underneath: the hero split */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={intro.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
-      <motion.div key={`${run}-${intro.style}`} className="absolute inset-0">
-        {intro.style === "curtain" && (
-          <>
-            <motion.div initial={{ scaleY: 1 }} animate={{ scaleY: 0 }} transition={{ delay: d * 0.6, duration: d * 0.35, ease: [0.76, 0, 0.24, 1] }} style={{ originY: 0, background: theme.ink }} className="absolute inset-0" />
-            <div className="absolute inset-0 grid place-items-center text-center" style={{ color: theme.paper }}>
-              <div className="overflow-hidden">
-                <motion.div initial={{ y: "110%" }} animate={{ y: ["110%", "0%", "0%", "-110%"] }} transition={{ duration: d * 0.7, times: [0, 0.35, 0.8, 1], ease: [0.16, 1, 0.3, 1] }} className="font-display text-4xl md:text-5xl">
-                  {intro.text}
-                </motion.div>
-              </div>
-            </div>
-          </>
+      <img src={hero.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={hero.image2 || hero.image} alt="" className="absolute inset-0 h-full w-full object-cover [clip-path:inset(0_0_0_50%)]" />
+      <AnimatePresence>
+        {playing && (
+          <IntroOverlay
+            key={`${run}-${intro.style}-${intro.text}`}
+            contained
+            config={{ ...intro, enabled: true }}
+            images={[hero.image, hero.image2]}
+            onDone={() => setPlaying(false)}
+          />
         )}
-        {intro.style === "counter" && <CounterPreview d={d} intro={intro} theme={theme} />}
-        {intro.style === "letters" && (
-          <div className="absolute inset-0 grid place-items-center" style={{ color: theme.paper }}>
-            <div className="flex font-display text-4xl md:text-6xl">
-              {intro.text.split("").map((c, i) => (
-                <motion.span key={i} initial={{ opacity: 0, y: 30, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ delay: 0.15 + i * (d * 0.06), duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
-                  {c === " " ? " " : c}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-        )}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ delay: d * 0.3 }} className="absolute inset-x-0 bottom-5 text-center font-display text-sm" style={{ color: theme.paper }}>
-          {intro.subtext}
-        </motion.div>
-      </motion.div>
-      <button onClick={() => setRun((r) => r + 1)} className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium backdrop-blur">
+      </AnimatePresence>
+      <button
+        onClick={() => {
+          setPlaying(false);
+          requestAnimationFrame(() => {
+            setRun((r) => r + 1);
+            setPlaying(true);
+          });
+        }}
+        className="absolute right-3 top-3 z-[120] flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink shadow-lg"
+      >
         ↻ Replay
       </button>
-      {!intro.enabled && <div className="absolute left-3 top-3 rounded-full bg-red-500 px-2.5 py-1 text-[11px] font-medium text-white">Disabled</div>}
-    </div>
-  );
-}
-
-function CounterPreview({ d, intro, theme }: { d: number; intro: SiteSettings["intro"]; theme: SiteSettings["theme"] }) {
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    const start = performance.now();
-    let raf = 0;
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - start) / (d * 800));
-      setN(Math.round((1 - Math.pow(1 - p, 3)) * 100));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [d]);
-  return (
-    <div className="absolute inset-0 flex flex-col justify-between p-5" style={{ color: theme.paper }}>
-      <div className="font-display text-2xl">{intro.text}</div>
-      <div className="flex items-end justify-between">
-        <div className="h-px flex-1 origin-left" style={{ background: theme.paper, transform: `scaleX(${n / 100})`, opacity: 0.5 }} />
-        <div className="ml-4 font-display text-6xl tabular-nums leading-none">{n}</div>
-      </div>
+      {!intro.enabled && <div className="absolute left-3 top-3 z-[120] rounded-full bg-red-500 px-2.5 py-1 text-[11px] font-semibold text-white">Disabled on site</div>}
     </div>
   );
 }
