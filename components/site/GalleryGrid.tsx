@@ -31,11 +31,11 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
 
   return (
     <div className="container-x py-16 md:py-24">
-      <div className="no-scrollbar mb-10 flex gap-1 overflow-x-auto">
+      <div className="no-scrollbar mb-10 flex w-fit max-w-full gap-1 overflow-x-auto rounded-full bg-white p-1.5 ring-1 ring-line">
         {cats.map((c) => (
-          <button key={c} onClick={() => setCat(c)} className="relative shrink-0 rounded-full px-4 py-2 text-sm">
-            {cat === c && <motion.span layoutId="gal-cat" className="absolute inset-0 rounded-full bg-ink" transition={{ duration: 0.5, ease: EXPO }} />}
-            <span className={cn("relative", cat === c ? "text-paper" : "text-ink/70")}>{c}</span>
+          <button key={c} onClick={() => setCat(c)} className="relative shrink-0 rounded-full px-4 py-2 text-sm font-semibold">
+            {cat === c && <motion.span layoutId="gal-cat" className="absolute inset-0 rounded-full bg-accent" transition={{ duration: 0.5, ease: EXPO }} />}
+            <span className={cn("relative", cat === c ? "text-white" : "text-ink/60")}>{c}</span>
           </button>
         ))}
       </div>
@@ -51,12 +51,13 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, ease: EXPO, delay: (i % 3) * 0.06 }}
-            className={cn("group relative mb-3 block w-full overflow-hidden rounded-2xl md:mb-5", i % 4 === 0 ? "aspect-[3/4]" : i % 4 === 2 ? "aspect-square" : "aspect-[4/3]")}
+            className={cn("group relative mb-3 block w-full overflow-hidden rounded-[24px] md:mb-5", i % 4 === 0 ? "aspect-[3/4]" : i % 4 === 2 ? "aspect-square" : "aspect-[4/3]")}
           >
             <Img src={g.src} alt={g.caption} fill sizes="(min-width:768px) 33vw, 50vw" className="object-cover transition-transform duration-[1.2s] ease-expo group-hover:scale-105" />
-            <span className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/60 to-transparent p-3 text-left text-sm text-white transition-transform duration-500 ease-expo group-hover:translate-y-0">
+            <span className="absolute bottom-3 left-3 translate-y-[150%] rounded-full bg-white px-3 py-1.5 text-xs font-bold text-ink transition-transform duration-500 ease-expo group-hover:translate-y-0">
               {g.caption}
             </span>
+            <span className="absolute right-3 top-3 grid h-9 w-9 scale-0 place-items-center rounded-full bg-accent text-white transition-transform duration-500 ease-expo group-hover:scale-100">+</span>
           </motion.button>
         ))}
       </div>
@@ -65,8 +66,8 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
         {open !== null && list[open] && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[95] flex flex-col bg-ink/95 p-4 backdrop-blur-xl md:p-10" onClick={() => setOpen(null)}>
             <div className="flex items-center justify-between text-paper">
-              <span className="font-mono text-xs">{open + 1} / {list.length}</span>
-              <button aria-label="Close" className="grid h-11 w-11 place-items-center rounded-full bg-white/10">✕</button>
+              <span className="font-display text-4xl tracking-[-0.04em]"><span className="text-accent">{String(open + 1).padStart(2, "0")}</span><span className="text-white/40"> / {String(list.length).padStart(2, "0")}</span></span>
+              <button aria-label="Close" className="grid h-12 w-12 place-items-center rounded-full bg-accent text-white">✕</button>
             </div>
             <motion.div
               layoutId={`gal-${list[open].id}`}
@@ -82,9 +83,9 @@ export default function GalleryGrid({ items }: { items: GalleryItem[] }) {
               <Img src={list[open].src} alt={list[open].caption} fill sizes="100vw" className="pointer-events-none object-contain" />
             </motion.div>
             <div className="flex items-center justify-between text-paper" onClick={(e) => e.stopPropagation()}>
-              <button onClick={() => setOpen((o) => (o! - 1 + list.length) % list.length)} className="rounded-full bg-white/10 px-4 py-2 text-sm">← Prev</button>
-              <p className="font-display text-xl">{list[open].caption}</p>
-              <button onClick={() => setOpen((o) => (o! + 1) % list.length)} className="rounded-full bg-white/10 px-4 py-2 text-sm">Next →</button>
+              <button onClick={() => setOpen((o) => (o! - 1 + list.length) % list.length)} className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold hover:bg-accent">← Prev</button>
+              <p className="font-display text-2xl tracking-[-0.03em]">{list[open].caption}</p>
+              <button onClick={() => setOpen((o) => (o! + 1) % list.length)} className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold hover:bg-accent">Next →</button>
             </div>
           </motion.div>
         )}
